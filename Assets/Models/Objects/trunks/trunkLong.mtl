@@ -1,10 +1,10 @@
-# Blender MTL File: 'stone4.blend'
+# Blender MTL File: 'trunkLong.blend'
 # Material Count: 1
 
-newmtl stone_SuperBig
+newmtl trunk_long
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.053591 0.053591 0.053591
+Kd 0.089841 0.010808 0.000000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.450000
