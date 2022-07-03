@@ -20,7 +20,9 @@ public class MovementRecognizer : MonoBehaviour
     public InputHelpers.Button leftGrabButton;
     public InputHelpers.Button leftTriggerButton;
     public Transform leftMovementSource;
-   
+    public InputHelpers.Button leftPrimaryButton;
+    public InputHelpers.Button leftSecondaryButton;
+
     public float inputThreshold = 0.1f;
     //#################################################################
     //Spell Handling
@@ -36,7 +38,7 @@ public class MovementRecognizer : MonoBehaviour
     public class UnityStringEvent : UnityEvent<string> { }
     public UnityStringEvent onRecognized;
     public SpellBook spellBook;
-    public String currentSpell = "";
+    public string currentSpell = "";
     int spellCooldown = 0;
     //#################################################################
     //Walk Handling
@@ -44,10 +46,16 @@ public class MovementRecognizer : MonoBehaviour
     [SerializeField]
     WalkManager walkManager;
 
+    [SerializeField]
+    WalkDetecter walkDetecter;
+
+    int debugTimer = 0;
+
 
     // Start is called before the first frame update
     void Start()
     {
+   
         string[] gestureFiles = Directory.GetFiles(Application.persistentDataPath, "*.xml");
         foreach(var item in gestureFiles)
         {
@@ -58,62 +66,70 @@ public class MovementRecognizer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(rightHand), rightTriggerButton, out bool rightTriggerIsPressed, inputThreshold);
-        InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftTriggerButton, out bool leftTriggerIsPressed, inputThreshold);
-
-        InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftGrabButton, out bool restart, inputThreshold);
-
-        if (restart)
+        try
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+            InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(rightHand), rightTriggerButton, out bool rightTriggerIsPressed, inputThreshold);
+            InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftTriggerButton, out bool leftTriggerIsPressed, inputThreshold);
 
-        if (rightTriggerIsPressed && leftTriggerIsPressed)
-        {
-            if (!isWalking)
+            if (rightTriggerIsPressed && leftTriggerIsPressed)
             {
-                walkManager.setLeftStartPoint(leftMovementSource.position);
-                walkManager.setRightStartPoint(rightMovementSource.position);
-                isWalking = true;
-            }
-
-            if (isWalking)
-            {
-                walkManager.testHandsForWalking(leftMovementSource.position,rightMovementSource.position);
-            }
-
-        }
-        else
-        {
-            isWalking = false;
-            if (spellCooldown == 0)
-            {
-                //spellBook.destroyTargetWall();
-                //Move Start
-                if (!isMoving && rightTriggerIsPressed)
+                if (!isWalking)
                 {
-                    StartMovement();
+                    walkManager.setLeftStartPoint(leftMovementSource.position);
+                    walkManager.setRightStartPoint(rightMovementSource.position);
+
+                    isWalking = true;
+
                 }
 
-                //End Move
-                if (isMoving && !rightTriggerIsPressed)
+                if (isWalking)
                 {
-                    EndMovement();
+                    walkManager.testHandsForWalking(leftMovementSource.position, rightMovementSource.position);
                 }
 
-                // in Move
-                if (isMoving && rightTriggerIsPressed)
-                {
-                    inMove();
-
-                }
             }
             else
             {
-                spellCooldown--;
+                Camera.main.fieldOfView = 60;
+
+                isWalking = false;
+                if (spellCooldown == 1)
+                    isMoving = false;
+                if (spellCooldown == 0)
+                {
+                    //spellBook.destroyTargetWall();
+                    //Move Start
+                    if (!isMoving && rightTriggerIsPressed)
+                    {
+                        StartMovement();
+                    }
+
+                    // in Move
+                    if (isMoving && rightTriggerIsPressed)
+                    {
+                        inMove();
+
+                    }
+
+                    //End Move
+                    if (isMoving && !rightTriggerIsPressed)
+                    {
+                        EndMovement();
+                    }
+
+
+                }
+                else
+                {
+                    spellCooldown--;
+                }
             }
         }
-    
+        catch (Exception e)
+        {
+            Debug.Log("Error Move:" + e.Message + " " + e.StackTrace);
+        }
+
     }
 
     void StartMovement()
@@ -133,11 +149,11 @@ public class MovementRecognizer : MonoBehaviour
             }
             else
             {
-                spellBook.safeStartPoint(rightMovementSource.position);
+                spellBook.SafeStartPoint(rightMovementSource.position);
             }
         }catch(Exception e)
         {
-            Debug.Log("Error 1:" + e.Message + " " + e.StackTrace); Debug.Log("Error:" + e.Message);
+            Debug.Log("Error 1:" + e.Message + " " + e.StackTrace); 
         }
     }
 
@@ -145,7 +161,7 @@ public class MovementRecognizer : MonoBehaviour
     {
         try
         {
-            if (String.Equals(currentSpell, ""))
+            if (String.Equals(currentSpell, "") && spellCooldown == 0)
             {
                 Vector3 lastPos = positionList[positionList.Count - 1];
                 if (Vector3.Distance(rightMovementSource.position, lastPos) > newPositionThresholdDistance)
@@ -161,11 +177,12 @@ public class MovementRecognizer : MonoBehaviour
             }
             else
             {
-                if (spellBook.checkTargetField(rightMovementSource.position))
+                if (spellBook.CheckTargetField(rightMovementSource.position))
                 {
-                    spellBook.castSpell(currentSpell);
+                    spellBook.CastSpell(currentSpell);
                     currentSpell = "";
-                    spellCooldown = 60;
+                    spellCooldown = 120;
+
                 }
             }
         }
@@ -200,20 +217,27 @@ public class MovementRecognizer : MonoBehaviour
                     gestureList.Add(newGesture);
                     string fileName = Application.persistentDataPath + "/" + newGestureName + ".xml";
                     GestureIO.WriteGesture(pointArray, newGestureName, fileName);
-                    creationMode = false;
+                   // creationMode = false;
                 }
                 else
                 {
 
-                    Debug.Log("Mode:Recognize Mode");
                     Result result = PointCloudRecognizer.Classify(newGesture, gestureList.ToArray());
 
-                    if (result.Score > recognitionThreshold)
+                    if (result.Score > recognitionThreshold && spellCooldown == 0)
                     {
                         // onRecognized.Invoke(result.GestureClass);
                         currentSpell = result.GestureClass;
-                        Debug.Log("Spell:" + currentSpell);
-                        spellBook.createTargetField(positionList, pointArray);
+                        if (spellBook.TestForTargetableSpell(currentSpell)) { 
+                            spellBook.CreateTargetField(positionList, pointArray);
+                            debugTimer++;
+                            }
+                        else
+                        {
+                            spellBook.CastSpell(currentSpell);
+                            currentSpell = "";
+                            positionList.Clear();
+                        }
 
                     }
 

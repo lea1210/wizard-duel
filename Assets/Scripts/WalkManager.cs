@@ -6,110 +6,125 @@ public class WalkManager : MonoBehaviour
 {
     private Vector3 rightStartPoint;
     private Vector3 leftStartPoint;
-    [SerializeField]
-    private float stepThreshhold = 0.2f;
-    private hands activeHand = hands.rightHand;
-    private enum hands { leftHand, rightHand,both };
-    [SerializeField]
-    private float stepLength = 0.5f;
-    [SerializeField]
-    private float stepPerSecond = 1f;
 
-    int walkResetTimer = 0;
-    int stepTimer = 0;
+    private float lastRightPercentage;
+    private float lastLeftPercentage;  
 
+    [SerializeField]
+    public float stepLength = 0.005f;
+
+    [SerializeField]
+    private float fullStepTreshhold = 0.25f;
+
+    private bool useHalfTreshhold = false;
+
+    [SerializeField]
     GameObject player;
- 
+    Rigidbody playerBody;
+
+    AudioSource audioSource;
+    public List<AudioClip> audios = new List<AudioClip>();
+
+
+
+
+    public bool canWalk;
+
+    private void Start()
+    {
+        playerBody = player.gameObject.GetComponent<Rigidbody>();
+        canWalk = true;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = audios[Random.Range(0, audios.Count)];
+    }
+
     void Update()
     {
 
-        if (stepTimer > 0)
-        {
-            walkResetTimer = 90;
-            movePlayer();
-            stepTimer--;
-            
-        }
-        else
-        {
-            Camera.main.fieldOfView = 60;
-            if (walkResetTimer >= 0)
-            {
-                walkResetTimer--;
-            }
-            else
-            {
-                activeHand = hands.both;
-            }
-
-        }
+       // Debug.Log("CanWalk: " + canWalk);
 
     }
 
     public void setRightStartPoint(Vector3 point)
     {
         rightStartPoint = point;
+        useHalfTreshhold=true;
     }
 
     public void setLeftStartPoint(Vector3 point)
     {
         leftStartPoint = point;
+        useHalfTreshhold = true;
     }
 
     public void testHandsForWalking(Vector3 leftHandsPos, Vector3 rightHandPos)
     {
-        switch (activeHand)
+   
+
+        float rightPercentage = calculateDistance(rightStartPoint, rightHandPos);
+        if(rightPercentage>0.5)
+        movePlayer(rightPercentage);
+
+        float leftPercentage = calculateDistance(leftStartPoint,leftHandsPos);
+        if(leftPercentage>0.5)
+        movePlayer(leftPercentage);
+
+        if (useHalfTreshhold)
         {
-            case hands.leftHand:
-                if(calculateDistance(leftStartPoint, leftHandsPos))
-                {
-                    setStepTimer();
-                    activeHand = hands.rightHand;
-                }
-                break;
-            case hands.rightHand:
-                if (calculateDistance(rightStartPoint, rightHandPos))
-                {
-                    setStepTimer();
-                    activeHand = hands.rightHand;
-                }
-                break;
-            case hands.both:
-                if (calculateDistance(leftStartPoint, leftHandsPos))
-                {
-                    setStepTimer();
-                    activeHand = hands.rightHand;
-                }
-                else if (calculateDistance(rightStartPoint, rightHandPos))
-                {
-                    setStepTimer();
-                    activeHand = hands.rightHand;
-                }
-                break;
+            detectNewStartPoint(leftPercentage,rightPercentage, leftHandsPos, rightHandPos);
         }
     }
 
-    private bool calculateDistance(Vector3 startPos,Vector3 currentPos)
+    private float calculateDistance(Vector3 startPos,Vector3 currentPos)
     {
+
+        float percentage = 0;
         Debug.Log("Distance: " + Mathf.Sqrt((startPos.y - currentPos.y) * 2));
-        if (Mathf.Sqrt((startPos.y - currentPos.y) * 2) >= stepThreshhold){
-            return true;
+        if (useHalfTreshhold)
+        {
+            percentage = Mathf.Abs((startPos.y - currentPos.y)) / (fullStepTreshhold / 2);
+            return percentage > 1 ? 1 : percentage;
+        }
+        else
+        {
+            percentage = Mathf.Abs((startPos.y - currentPos.y)) / fullStepTreshhold;
+            return percentage > 1 ? 1 : percentage;
+        }
+    }
+
+    private void detectNewStartPoint(float leftPercentage , float rightPercentage, Vector3 leftHandsPos, Vector3 rightHandPos)
+    {
+        if(leftPercentage < lastLeftPercentage)
+        {
+            useHalfTreshhold = false;
+            leftStartPoint = leftHandsPos;
+        }
+        if(rightPercentage < lastRightPercentage)
+        {
+            useHalfTreshhold=false;
+            rightStartPoint = rightHandPos;
         }
 
-        return false;
     }
 
-    private void setStepTimer()
+    public void movePlayer(float movePercentage)
     {
-        stepTimer = Application.targetFrameRate;
+        if (canWalk)
+        {
+            float distance = stepLength * movePercentage;
+            //player.transform.Translate(new Vector3(Camera.main.transform.forward.x * distance, 0, Camera.main.transform.forward.z * distance));
+            playerBody.transform.Translate(new Vector3(Camera.main.transform.forward.x * distance, 0, Camera.main.transform.forward.z * distance),Space.World);
+            Camera.main.fieldOfView = 70;
+        }
     }
 
-    private void movePlayer()
+
+    void playAudio()
     {
-      float distance = stepLength * stepPerSecond * Time.deltaTime;
-      player.transform.position = player.transform.position + new Vector3(Camera.main.transform.forward.x * distance, 0, Camera.main.transform.forward.z * distance);
-      Camera.main.fieldOfView = 70;
+        audioSource.Play();
+        audioSource.clip = audios[UnityEngine.Random.Range(0, audios.Count)];
     }
+
 
 
 }
