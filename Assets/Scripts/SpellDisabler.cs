@@ -12,7 +12,6 @@ public class SpellDisabler : MonoBehaviour
     {
         if (String.Compare(collision.gameObject.tag, "Spell") == 0)
         {
-            Debug.Log(collision.gameObject.name);
             if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
             {
                 collision.gameObject.GetComponent<MeshRenderer>().enabled = false;

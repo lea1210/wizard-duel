@@ -63,7 +63,7 @@ public class EnemyManager : MonoBehaviour
         playerCastEvent.AddListener(tryDodge);
         spellList.Add(SpellTypes.SpellType.fire);
         spellList.Add(SpellTypes.SpellType.circle);
-        //spellList.Add(SpellTypes.SpellType.speed);
+        spellList.Add(SpellTypes.SpellType.speed);
     }
 
     // Update is called once per frame
@@ -87,7 +87,6 @@ public class EnemyManager : MonoBehaviour
                 if (spellBook.TestForTargetableSpell(currentSpell.ToString(), this))
                 {
                     spellBook.createEnemyTargetField(currentEnemy);
-                    Debug.Log("Created Wall");
                 }
                 moving = false;
             }
@@ -182,14 +181,14 @@ public class EnemyManager : MonoBehaviour
     {
         if(Vector3.Distance(currentEnemy.transform.position, player.transform.position) > targetingDistance)
         {
-            currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x, 0, currentEnemy.transform.position.z - player.transform.position.z) * -movementSpeed, Space.World);
+            currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x, 0, currentEnemy.transform.position.z - player.transform.position.z) * -movementSpeed*0.25f, Space.World);
             movingDirection = Vector3.zero;
             movementChanged = true;
            // Debug.Log("Targeting");
         }
         else if (Vector3.Distance(currentEnemy.transform.position, player.transform.position) < fleeingDistance)
         {
-            currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x,0, currentEnemy.transform.position.z - player.transform.position.z) * movementSpeed,Space.World);
+            currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x,0, currentEnemy.transform.position.z - player.transform.position.z) * movementSpeed * 0.25f, Space.World);
             movingDirection = Vector3.zero;
             movementChanged = true;
             //Debug.Log("Fleeing");
@@ -207,7 +206,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (Vector3.Distance(obj.transform.position, currentEnemy.transform.position) < avoidDistance)
             {
-                currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - obj.transform.position.x, 0, currentEnemy.transform.position.z - obj.transform.position.z) * movementSpeed, Space.World);
+                currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - obj.transform.position.x, 0, currentEnemy.transform.position.z - obj.transform.position.z) * movementSpeed*0.25f, Space.World);
                 movingDirection = Vector3.zero;
                 movementChanged = true;
                 //Debug.Log("avoiding");

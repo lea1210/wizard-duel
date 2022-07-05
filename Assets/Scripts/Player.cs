@@ -40,22 +40,23 @@ public class Player : MonoBehaviour
                 //case SpellTypes.SpellType.circle.ToString():
                 case "circle":
                     currentHealth -= (int)SpellTypes.SpellType.circle;
+                    animator.Play("DamageShake");
                     break;
                 case "fire":
                     currentHealth -= (int)SpellTypes.SpellType.fire;
+                    animator.Play("DamageShake");
                     break;
             }
 
-            animator.Play("DamageShake");
+            
             if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
             {
                 collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 Destroy(collision.gameObject, 1f);
+                
             }
             else if (String.Compare(collision.gameObject.tag, "Spell") == 0)
             {
-
-
                 collision.gameObject.name = "detected";
             }
         }
@@ -67,7 +68,7 @@ public class Player : MonoBehaviour
         float healthRatio = currentHealth / maxHealth;
         float value = 3 - 3 * healthRatio;
         healthbar.offsetMin = new Vector2(3 - 3 * healthRatio, healthbar.offsetMin.y);
-
+        
     }
 
     public void playSound(AudioClip sound)

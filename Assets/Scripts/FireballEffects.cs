@@ -22,7 +22,6 @@ public class FireballEffects : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Fireball impact");
         audioSource.clip = fireballExplosion;
         audioSource.Play();
     }
