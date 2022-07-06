@@ -50,12 +50,18 @@ public class MovementRecognizer : MonoBehaviour
     WalkDetecter walkDetecter;
 
     int debugTimer = 0;
+    [SerializeField]
+    AudioClip spawnTargetCircle;
+    [SerializeField]
+    Player player;
+
+    Vector3 wandLength;
 
 
     // Start is called before the first frame update
     void Start()
     {
-   
+        wandLength = player.transform.forward * 0.34f;
         string[] gestureFiles = Directory.GetFiles(Application.persistentDataPath, "*.xml");
         foreach(var item in gestureFiles)
         {
@@ -70,6 +76,8 @@ public class MovementRecognizer : MonoBehaviour
         {
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(rightHand), rightTriggerButton, out bool rightTriggerIsPressed, inputThreshold);
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftTriggerButton, out bool leftTriggerIsPressed, inputThreshold);
+
+            rightTriggerIsPressed = true;
 
             if (rightTriggerIsPressed && leftTriggerIsPressed)
             {
@@ -142,7 +150,7 @@ public class MovementRecognizer : MonoBehaviour
             {
 
                 positionList.Clear();
-                positionList.Add(rightMovementSource.position);
+                positionList.Add(rightMovementSource.position+wandLength);
 
                 if (debugCubePrefab)
                    Destroy(Instantiate(debugCubePrefab, rightMovementSource.position, Quaternion.identity), 3);
@@ -169,7 +177,7 @@ public class MovementRecognizer : MonoBehaviour
 
                     if (debugCubePrefab)
                     {
-                        Destroy(Instantiate(debugCubePrefab, rightMovementSource.position, Quaternion.identity), 3);
+                        Destroy(Instantiate(debugCubePrefab, rightMovementSource.position+wandLength, Quaternion.identity), 3);
 
                     }
                     positionList.Add(rightMovementSource.position);
@@ -177,7 +185,7 @@ public class MovementRecognizer : MonoBehaviour
             }
             else
             {
-                if (spellBook.CheckTargetField(rightMovementSource.position))
+                if (spellBook.CheckTargetField(rightMovementSource.position+wandLength))
                 {
                     spellBook.CastSpell(currentSpell);
                     currentSpell = "";
@@ -226,17 +234,21 @@ public class MovementRecognizer : MonoBehaviour
 
                     if (result.Score > recognitionThreshold && spellCooldown == 0)
                     {
-                        // onRecognized.Invoke(result.GestureClass);
                         currentSpell = result.GestureClass;
-                        if (spellBook.TestForTargetableSpell(currentSpell)) { 
-                            spellBook.CreateTargetField(positionList, pointArray);
-                            debugTimer++;
-                            }
-                        else
+                        if (spellBook.testSpellUnlocked(currentSpell))
                         {
-                            spellBook.CastSpell(currentSpell);
-                            currentSpell = "";
-                            positionList.Clear();
+                            if (spellBook.TestForTargetableSpell(currentSpell))
+                            {
+                                player.playSound(spawnTargetCircle);
+                                spellBook.CreateTargetField(positionList, pointArray);
+                               
+                            }
+                            else
+                            {
+                                spellBook.CastSpell(currentSpell);
+                                currentSpell = "";
+                                positionList.Clear();
+                            }
                         }
 
                     }

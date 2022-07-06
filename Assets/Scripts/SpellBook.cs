@@ -10,6 +10,9 @@ public class SpellBook : MonoBehaviour
     
     public Dictionary<string,int> spellbook = new Dictionary<string,int>();
     public List<string> nonTargetableSpells = new List<string>();
+
+    [SerializeField]
+    private int spellbookLevel = 3;
     private Vector3 spellCenter;
 
     Vector3 spellCastStartPoint;
@@ -31,12 +34,15 @@ public class SpellBook : MonoBehaviour
     private GameObject tempFireball;
 
   
-  public UnityEvent playerCastEvent;
+    public UnityEvent playerCastEvent;
     [SerializeField]
     WalkDetecter walkDetecter;
 
     [SerializeField]
-    WalkManager playerWalk;
+    TrackCameraCollision collisionCamera;
+
+    [SerializeField]
+    Player player;
     int speedTimerPlayer = -1;
 
 
@@ -76,7 +82,7 @@ public class SpellBook : MonoBehaviour
         }
         else if(speedTimerPlayer==0)
         {
-            playerWalk.stepLength *= 0.5f;
+            player.modifyMovementSpeed(0.5f);
             speedTimerPlayer = -1;
             passiveEffectPlayer.SetActive(false);
         }
@@ -116,6 +122,22 @@ public class SpellBook : MonoBehaviour
 
     }
 
+    public bool testSpellUnlocked(string spell)
+    {
+        if (spellbook[spell] <= spellbookLevel){
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void increaseSpellbookLevel()
+    {
+        spellbookLevel++;
+    }
+
     public void CreateTargetField(List<Vector3> spellPositions, Point[] spellPoints)
     {
         try
@@ -140,7 +162,7 @@ public class SpellBook : MonoBehaviour
 
                 Vector3 playerWallVektor = spellCenter - playerPosition;
 
-                spellCenter += playerWallVektor;
+                spellCenter += playerWallVektor*0.6f;
                 tempSpellTargetWall = Instantiate(spellTargetWall, spellCenter, Quaternion.identity);
             }
         }catch(Exception ex)
@@ -252,7 +274,7 @@ public class SpellBook : MonoBehaviour
         {
             audioSource.clip = speedUp;
             audioSource.Play();
-            playerWalk.stepLength *= 2;
+            player.modifyMovementSpeed(2);  
             if(speedTimerPlayer == -1)
                 speedTimerPlayer = (int)SpellTypes.SpellType.speed;
         }
@@ -272,15 +294,16 @@ public class SpellBook : MonoBehaviour
         if (caster)
         {
             tempStone.tag = "Spell";
-            body.AddForce(caster.currentEnemy.transform.forward * 1000 + spellCastPoint);
+            body.AddForce(caster.GetAlteredCastVector(caster.currentEnemy.transform.forward * 1000 + spellCastPoint));
            
         }
         else
         {
+            collisionCamera.ignoreSpell(tempStone);
             tempStone.tag = "OwnSpell";
             Vector3 forceVector = (center - spellCastPoint);
-            playerCastEvent.Invoke();
             body.AddForce(forceVector * 3000);
+            
         }
         body.useGravity = true;
         
@@ -306,15 +329,16 @@ public class SpellBook : MonoBehaviour
         if (caster)
         {
             tempFireball.tag = "Spell";
-            body.velocity = caster.currentEnemy.transform.forward * 20;
+            body.velocity = caster.GetAlteredCastVector(spellCastPoint) * 20;
 
         }
         else
-        { 
+        {
+            collisionCamera.ignoreSpell(tempFireball);
             tempFireball.tag = "OwnSpell";
             Vector3 forceVector = (center - spellCastPoint);
             playerCastEvent.Invoke();
-            body.velocity = forceVector * 5;
+            body.velocity = forceVector * 15;
         }
         body.useGravity = true;
 
@@ -327,6 +351,16 @@ public class SpellBook : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         caster.AddComponent<BoxCollider>();
+    }
+
+    public int getSpellbookLevel()
+    {
+        return spellbookLevel;
+    }
+
+    public void setSpellbookLevel(int level)
+    {
+        spellbookLevel = level;
     }
     
 }

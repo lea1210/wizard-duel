@@ -15,6 +15,11 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     public GameObject enemyModel;
 
+    [SerializeField]
+    bool trainMode = false;
+
+    int damageTimer = 150; 
+
 
     AudioSource audioSource;
 
@@ -31,6 +36,16 @@ public class Enemy : MonoBehaviour
     {
         if(currentHealth >= 0)
             UpdateHealth();
+
+        if (trainMode)
+        {
+            damageTimer++;
+            if(damageTimer >= 150)
+            {
+                if(currentHealth < maxHealth)
+                currentHealth += 1f;
+            }
+        }
         
     }
 
@@ -46,17 +61,18 @@ public class Enemy : MonoBehaviour
                 currentHealth -= (int)SpellTypes.SpellType.fire;
                 break;
         }
-        audioSource.Play();
-        Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
+        if (collision.gameObject.name != "detected")
         {
-            Destroy(collision.gameObject);
-        }
-        else if (String.Compare(collision.gameObject.tag, "Spell") == 0 || String.Compare(collision.gameObject.tag, "OwnSpell") == 0)
-        {
-
-
-            collision.gameObject.name = "detected";
+            damageTimer = 0;
+            if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
+            {
+                collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                Destroy(collision.gameObject, 0.5f);
+            }
+            else if (String.Compare(collision.gameObject.tag, "OwnSpell") == 0)
+            {
+                collision.gameObject.name = "detected";
+            }
         }
     }
 

@@ -397,6 +397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   healthbar: {fileID: 6344599715981853953}
+  movementSpeed: 0.005
 --- !u!114 &6344599716145949586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,6 +625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nonTargetableSpells: []
+  spellbookLevel: 3
   spellTargetWall: {fileID: 3202762379029751497, guid: dda29618aa057e1429b3f246734ef70c, type: 3}
   enemySpellTargetWall: {fileID: 1429867217770208775, guid: 915b668ffdf35ff4db27cf876d417494, type: 3}
   stone: {fileID: 6367859781594337630, guid: 02a95c518aa33ea4cb72a55cb039ca31, type: 3}
@@ -1278,7 +1280,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepLength: 0.5
   fullStepTreshhold: 0.25
-  player: {fileID: 6344599716145949288}
+  playerObj: {fileID: 6344599716145949288}
+  player: {fileID: 6344599716145949589}
   audios:
   - {fileID: 8300000, guid: 40a68943ef1602642a1f5083283dfb91, type: 3}
   - {fileID: 8300000, guid: 1baaa767fc8202b4a9a1203a8558d0a1, type: 3}

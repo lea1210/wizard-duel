@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     RectTransform healthbar;
 
+    [SerializeField]
+    private float movementSpeed = 0.005f;
+
     Animator animator;
 
     AudioSource audioSource;
@@ -52,7 +55,7 @@ public class Player : MonoBehaviour
             if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
             {
                 collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                Destroy(collision.gameObject, 1f);
+                Destroy(collision.gameObject, 0.5f);
                 
             }
             else if (String.Compare(collision.gameObject.tag, "Spell") == 0)
@@ -75,6 +78,16 @@ public class Player : MonoBehaviour
     {
         audioSource.clip = sound;
         audioSource.Play();
+    }
+
+    public float GetMovementSpeed()
+    {
+        return movementSpeed;
+    }
+
+    public void modifyMovementSpeed(float modifyer)
+    {
+        movementSpeed = movementSpeed * modifyer;   
     }
 
 

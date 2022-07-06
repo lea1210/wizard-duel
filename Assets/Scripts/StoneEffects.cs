@@ -21,10 +21,10 @@ public class StoneEffects : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (gameObject.name != "detected")
+         if (gameObject.name != "detected")
         {
-            audioSource.clip = impactStone;
-            audioSource.Play();
+                audioSource.clip = impactStone;
+                audioSource.Play();
         }
     }
 }

@@ -24,9 +24,10 @@ public class Chatbubble : MonoBehaviour
         {
             textList.Add(line);
         }
-        Debug.Log(textList.Count);
         setText();
     }
+
+
 
     private void setText()
     {

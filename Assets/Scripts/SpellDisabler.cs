@@ -10,7 +10,7 @@ public class SpellDisabler : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (String.Compare(collision.gameObject.tag, "Spell") == 0)
+        if (String.Compare(collision.gameObject.tag, "Spell") == 0 || String.Compare(collision.gameObject.tag, "OwnSpell") == 0)
         {
             if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
             {

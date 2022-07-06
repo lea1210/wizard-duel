@@ -16,7 +16,6 @@ public class EnemyManager : MonoBehaviour
     public SpellBook spellBook;
 
     //Timer
-    int randomTimer = 0;
     int spellTimer = 0;
     int movementTimer = 0;
     int spellTimerOffset = 0;
@@ -32,14 +31,12 @@ public class EnemyManager : MonoBehaviour
 
     List<SpellTypes.SpellType> spellList = new List<SpellTypes.SpellType> ();
 
-    UnityEvent playerCastEvent;
     [SerializeField]
     Animator animator;
 
     [SerializeField]
     public float movementSpeed = 0.1f;
     Vector3 movingDirection = Vector3.zero;
-    public bool doDodge = false;
 
     public bool moving = true;
 
@@ -55,14 +52,20 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     AudioClip speedUp;
 
+    [SerializeField]
+    int spellLevel = 0;
+
+    [SerializeField]
+    float missingAngle = 0f;
+    [SerializeField]
+    float chanceToMiss = 0f;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        playerCastEvent = spellBook.playerCastEvent;
-        playerCastEvent.AddListener(tryDodge);
-        spellList.Add(SpellTypes.SpellType.fire);
         spellList.Add(SpellTypes.SpellType.circle);
+        spellList.Add(SpellTypes.SpellType.fire);
         spellList.Add(SpellTypes.SpellType.speed);
     }
 
@@ -71,19 +74,19 @@ public class EnemyManager : MonoBehaviour
     {
         if (currentEnemy)
         {
-            randomTimer++;
-            spellTimer++;
+            if (spellLevel > 0) 
+                spellTimer++;
             movementTimer++;
 
-            if (randomTimer > 100)
-                randomTimer = 0;
 
             if (spellTimer == castCooldown)
                 moving = true;
 
             if (spellTimer == spellTimerMax + spellTimerOffset - castDelay)
             {
-                currentSpell = spellList[Random.Range(0, spellList.Count)];
+                if (spellLevel > spellList.Count)
+                    spellLevel = spellList.Count;
+                currentSpell = spellList[Random.Range(0, spellLevel)];
                 if (spellBook.TestForTargetableSpell(currentSpell.ToString(), this))
                 {
                     spellBook.createEnemyTargetField(currentEnemy);
@@ -147,27 +150,32 @@ public class EnemyManager : MonoBehaviour
         float distance = Vector3.Distance(currentEnemy.transform.position, player.transform.position);
         if (currentSpell == SpellTypes.SpellType.circle)
         {
-            
             return new Vector3(0, distance / 0.085f, 0);
         }
         else
         {
-            return new Vector3(0, distance, 0);
+            Vector3 vec =  gameObject.transform.forward;
+            return vec;
         }
+
     }
 
-    private void tryDodge()
+    public Vector3 GetAlteredCastVector(Vector3 castVector)
     {
-        if (doDodge)
+        if (Random.Range(0, 100) < chanceToMiss)
         {
-            if (randomTimer > 50)
-            {
-
-            }
-            Debug.Log("Enemy: Dodging");
+            if (missingAngle > 90)
+                missingAngle = 90;
+            float direction = Random.Range(-100, 100) > 0 ? 1 : -1;
+            float rotation = Random.Range(0, missingAngle) * direction;
+            return Quaternion.AngleAxis(rotation, Vector3.up) * castVector;
         }
-        Debug.Log("Enemy: Not Dodging");
+        else
+        {
+            return castVector;
+        }
     }
+
 
     private void CreateNewMovementDirection()
     {

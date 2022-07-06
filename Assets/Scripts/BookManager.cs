@@ -31,8 +31,6 @@ public class BookManager : MonoBehaviour
     GameObject closedBook;
 
     [SerializeField]
-    GameObject pageTurner;
-    [SerializeField]
     Animator animator;
 
     [SerializeField]
@@ -48,6 +46,9 @@ public class BookManager : MonoBehaviour
     [SerializeField]
     MovementRecognizer movementRecognizer;
 
+    [SerializeField]
+    SpellBook spellbook;
+
 
     
     // Start is called before the first frame update
@@ -58,6 +59,7 @@ public class BookManager : MonoBehaviour
         open = false;
         rightGrip = false;
         leftGrip = false;
+        Debug.Log("Spellbook: Level " + spellbook.getSpellbookLevel());
     }
 
 
@@ -101,6 +103,7 @@ public class BookManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("Page: " + currentPage);
                     closedBook.SetActive(true);
                     openBook.SetActive(false);
                     openTimer = -1;
@@ -114,15 +117,16 @@ public class BookManager : MonoBehaviour
                 rightGrip = rightGripIsPressed;
                 if (rightGrip && open)
                 {
-                    animator.Play("PageTurn");
-                    pages[currentPage].SetActive(false);
-                    currentPage++;
-                    if (currentPage == pages.Count)
+                    if (currentPage < spellbook.getSpellbookLevel())
                     {
-                        currentPage = 0;
+                            animator.Play("PageTurn");
+                            pages[currentPage].SetActive(false);
+                            currentPage++; 
+                            Debug.Log("Page: " + currentPage);
+                            playAudio();
+                            pages[currentPage].SetActive(true);
                     }
-                    playAudio();
-                    pages[currentPage].SetActive(true);
+                 
                 }
             }
             if (!rightGripIsPressed)
@@ -133,17 +137,17 @@ public class BookManager : MonoBehaviour
                 Debug.Log("Book: Left Grip Pressed");
                 leftGrip = leftGripIsPressed;
                 if (leftGrip && open)
-                {
-                    animator.Play("PageTurnBack");
-                    pages[currentPage].SetActive(false);
-                    currentPage--;
-                    if (currentPage == -1)
+                {          
+                    if(currentPage > 0)
                     {
-                        currentPage = pages.Count - 1;
+                        animator.Play("PageTurnBack");
+                        pages[currentPage].SetActive(false);
+                        currentPage--;
+                        Debug.Log("Page: " + currentPage);
+                        playAudio();
+                        pages[currentPage].SetActive(true);
                     }
-                    playAudio();
-
-                    pages[currentPage].SetActive(true);
+        
                 }
             }
             if (!leftGripIsPressed)
@@ -171,6 +175,11 @@ public class BookManager : MonoBehaviour
 
 
 
+    }
+
+    public bool getOpen()
+    {
+        return open;
     }
 
     void playAudio()

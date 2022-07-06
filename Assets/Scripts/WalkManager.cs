@@ -11,63 +11,76 @@ public class WalkManager : MonoBehaviour
     private float lastLeftPercentage;  
 
     [SerializeField]
-    public float stepLength = 0.005f;
-
-    [SerializeField]
     private float fullStepTreshhold = 0.25f;
 
     private bool useHalfTreshhold = false;
 
     [SerializeField]
-    GameObject player;
+    GameObject playerObj;
     Rigidbody playerBody;
+    [SerializeField]
+    Player player;
 
     AudioSource audioSource;
     public List<AudioClip> audios = new List<AudioClip>();
 
+    float summDistance = 0;
 
+    int side = -1;
+
+    [SerializeField]
+    BookManager bookManager;
 
 
     public bool canWalk;
 
     private void Start()
     {
-        playerBody = player.gameObject.GetComponent<Rigidbody>();
+        playerBody = playerObj.gameObject.GetComponent<Rigidbody>();
         canWalk = true;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = audios[Random.Range(0, audios.Count)];
-    }
-
-    void Update()
-    {
-
-       // Debug.Log("CanWalk: " + canWalk);
-
     }
 
     public void setRightStartPoint(Vector3 point)
     {
         rightStartPoint = point;
         useHalfTreshhold=true;
+        side = -1;
     }
 
     public void setLeftStartPoint(Vector3 point)
     {
         leftStartPoint = point;
         useHalfTreshhold = true;
+        side = -1;
+
     }
 
     public void testHandsForWalking(Vector3 leftHandsPos, Vector3 rightHandPos)
     {
-   
-
         float rightPercentage = calculateDistance(rightStartPoint, rightHandPos);
-        if(rightPercentage>0.5)
-        movePlayer(rightPercentage);
+        float leftPercentage = calculateDistance(leftStartPoint, leftHandsPos);
 
-        float leftPercentage = calculateDistance(leftStartPoint,leftHandsPos);
-        if(leftPercentage>0.5)
-        movePlayer(leftPercentage);
+        if (side == 2 || side < 0)
+        {
+            
+            if (rightPercentage > 0.9)
+            {
+                movePlayer(rightPercentage);
+                side = 1;
+            }
+        }
+
+        if (side == 1 || side < 0)
+        {
+            
+            if (leftPercentage > 0.9)
+            {
+                movePlayer(leftPercentage);
+                side = 2;
+            }
+        }
 
         if (useHalfTreshhold)
         {
@@ -111,10 +124,22 @@ public class WalkManager : MonoBehaviour
     {
         if (canWalk)
         {
-            float distance = stepLength * movePercentage;
-            //player.transform.Translate(new Vector3(Camera.main.transform.forward.x * distance, 0, Camera.main.transform.forward.z * distance));
+            float multipler = 1f;
+            if (!bookManager.getOpen())
+                multipler = 1.5f;
+            float distance = player.GetMovementSpeed() * movePercentage * multipler;
             playerBody.transform.Translate(new Vector3(Camera.main.transform.forward.x * distance, 0, Camera.main.transform.forward.z * distance),Space.World);
             Camera.main.fieldOfView = 70;
+            if(summDistance > player.GetMovementSpeed()*10)
+            {
+                playAudio();
+                summDistance = 0;
+            }
+            else
+            {
+                summDistance += distance;
+            }
+            
         }
     }
 

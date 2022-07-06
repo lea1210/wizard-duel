@@ -9,12 +9,12 @@ public class TrackCameraCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
-        player.OnCollison(collision);
+        if(collision.gameObject.tag != "OwnSpell")
+            player.OnCollison(collision);
     }
 
-    private void Update()
+    public void ignoreSpell(GameObject spell)
     {
-        
+        Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), spell.GetComponent<Collider>());
     }
 }
