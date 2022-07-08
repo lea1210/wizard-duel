@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,9 @@ public class WalkManager : MonoBehaviour
     [SerializeField]
     BookManager bookManager;
 
+    bool leftHandUp = false;
+    bool rightHandUp = false;
+
 
     public bool canWalk;
 
@@ -39,48 +43,44 @@ public class WalkManager : MonoBehaviour
         playerBody = playerObj.gameObject.GetComponent<Rigidbody>();
         canWalk = true;
         audioSource = GetComponent<AudioSource>();
-        audioSource.clip = audios[Random.Range(0, audios.Count)];
+        audioSource.clip = audios[UnityEngine.Random.Range(0, audios.Count)];
     }
 
     public void setRightStartPoint(Vector3 point)
     {
         rightStartPoint = point;
         useHalfTreshhold=true;
-        side = -1;
     }
 
     public void setLeftStartPoint(Vector3 point)
     {
         leftStartPoint = point;
         useHalfTreshhold = true;
-        side = -1;
 
     }
 
+   
+
     public void testHandsForWalking(Vector3 leftHandsPos, Vector3 rightHandPos)
     {
-        float rightPercentage = calculateDistance(rightStartPoint, rightHandPos);
-        float leftPercentage = calculateDistance(leftStartPoint, leftHandsPos);
+        float rightPercentage = calculateDistance(rightStartPoint, rightHandPos,false);
+        float leftPercentage = calculateDistance(leftStartPoint, leftHandsPos, true);
 
-        if (side == 2 || side < 0)
-        {
-            
-            if (rightPercentage > 0.9)
+
+            if (rightPercentage > 0.5)
             {
                 movePlayer(rightPercentage);
                 side = 1;
             }
-        }
+        
 
-        if (side == 1 || side < 0)
-        {
-            
-            if (leftPercentage > 0.9)
+   
+            if (leftPercentage > 0.5)
             {
                 movePlayer(leftPercentage);
                 side = 2;
             }
-        }
+       
 
         if (useHalfTreshhold)
         {
@@ -88,19 +88,20 @@ public class WalkManager : MonoBehaviour
         }
     }
 
-    private float calculateDistance(Vector3 startPos,Vector3 currentPos)
+    private float calculateDistance(Vector3 startPos, Vector3 currentPos, bool leftSide)
     {
 
         float percentage = 0;
         Debug.Log("Distance: " + Mathf.Sqrt((startPos.y - currentPos.y) * 2));
         if (useHalfTreshhold)
         {
-            percentage = Mathf.Abs((startPos.y - currentPos.y)) / (fullStepTreshhold / 2);
-            return percentage > 1 ? 1 : percentage;
+
+            percentage = (startPos.y - currentPos.y) / (fullStepTreshhold / 2);
+            return Math.Abs(percentage) > 1 ? 1 : Math.Abs(percentage);
         }
         else
         {
-            percentage = Mathf.Abs((startPos.y - currentPos.y)) / fullStepTreshhold;
+            percentage = (startPos.y - currentPos.y) / fullStepTreshhold;
             return percentage > 1 ? 1 : percentage;
         }
     }

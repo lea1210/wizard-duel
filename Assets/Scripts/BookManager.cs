@@ -49,6 +49,13 @@ public class BookManager : MonoBehaviour
     [SerializeField]
     SpellBook spellbook;
 
+    [SerializeField]
+    GameObject stonepage;
+    [SerializeField]
+    GameObject firepage;
+    [SerializeField]
+    GameObject speedPage;
+
 
     
     // Start is called before the first frame update
@@ -117,14 +124,15 @@ public class BookManager : MonoBehaviour
                 rightGrip = rightGripIsPressed;
                 if (rightGrip && open)
                 {
-                    if (currentPage < spellbook.getSpellbookLevel())
+                    if (currentPage < spellbook.getSpellbookLevel()-1)
                     {
                             animator.Play("PageTurn");
                             pages[currentPage].SetActive(false);
+                            pages[currentPage+1].SetActive(true);
                             currentPage++; 
                             Debug.Log("Page: " + currentPage);
                             playAudio();
-                            pages[currentPage].SetActive(true);
+                            
                     }
                  
                 }
@@ -142,10 +150,11 @@ public class BookManager : MonoBehaviour
                     {
                         animator.Play("PageTurnBack");
                         pages[currentPage].SetActive(false);
+                        pages[currentPage-1].SetActive(true);
                         currentPage--;
                         Debug.Log("Page: " + currentPage);
                         playAudio();
-                        pages[currentPage].SetActive(true);
+                        
                     }
         
                 }

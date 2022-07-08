@@ -338,7 +338,7 @@ public class SpellBook : MonoBehaviour
             tempFireball.tag = "OwnSpell";
             Vector3 forceVector = (center - spellCastPoint);
             playerCastEvent.Invoke();
-            body.velocity = forceVector * 15;
+            body.velocity = forceVector * 30;
         }
         body.useGravity = true;
 
