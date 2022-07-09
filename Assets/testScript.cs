@@ -23,6 +23,6 @@ public class testScript : MonoBehaviour
     {
         // rb.transform.Translate(Camera.main.transform.forward*0.001f, Space.World);
         recognizer.isWalking = true;
-        manager.movePlayer(2f);
+        manager.movePlayer(0.01f);
     }
 }

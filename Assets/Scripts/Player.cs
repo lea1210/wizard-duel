@@ -16,7 +16,11 @@ public class Player : MonoBehaviour
 
     Animator animator;
 
+    [SerializeField]
+    Animator fadeAnimator;
+
     AudioSource audioSource;
+
 
 
     // Start is called before the first frame update
@@ -25,13 +29,16 @@ public class Player : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         currentHealth = maxHealth;
+        playFadeIn();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentHealth >= 0)
+        if (currentHealth < 0)
+            currentHealth = 0;
             UpdateHealth();
+     
     }
 
     public void OnCollison(Collision collision)
@@ -52,16 +59,18 @@ public class Player : MonoBehaviour
             }
 
             
-            if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
+            if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString() && collision.gameObject.tag != "OwnSpell")
             {
-                collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                Destroy(collision.gameObject, 0.5f);
+                GameObject child = collision.gameObject.transform.GetChild(0).gameObject;
+                child.SetActive(false);
+                Destroy(collision.gameObject, 1.5f);
                 
             }
             else if (String.Compare(collision.gameObject.tag, "Spell") == 0)
             {
                 collision.gameObject.name = "detected";
             }
+            Debug.Log(currentHealth);
         }
     }
 
@@ -88,6 +97,21 @@ public class Player : MonoBehaviour
     public void modifyMovementSpeed(float modifyer)
     {
         movementSpeed = movementSpeed * modifyer;   
+    }
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public void playFadeOut()
+    {
+        fadeAnimator.Play("FadeOut");
+    }
+
+
+    public void playFadeIn()
+    {
+        fadeAnimator.Play("FadeIn");
     }
 
 

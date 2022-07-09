@@ -23,8 +23,23 @@ public class FireballEffects : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        audioSource.clip = fireballExplosion;
-        audioSource.Play();
+        if(gameObject.tag == "Spell")
+        {
+            if(collision.gameObject.tag != "Enemy")
+            {
+                audioSource.clip = fireballExplosion;
+                audioSource.Play();
+            }
+        }
+        if (gameObject.tag == "OwnSpell")
+        {
+            if (collision.gameObject.tag != "MainCamera")
+            {
+                audioSource.clip = fireballExplosion;
+                audioSource.Play();
+            }
+        }
+
     }
 
 }

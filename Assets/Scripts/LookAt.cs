@@ -6,17 +6,21 @@ public class LookAt : MonoBehaviour
 {
     
     public GameObject target;
+    [SerializeField]
+    private SpellBook spellbook;
 
     private void Start()
-    {
-        target = Camera.main.gameObject;
+    {   
+        if(target == null)
+            target = Camera.main.gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(target)
-        transform.LookAt(target.transform);
+        if(spellbook != null)
+            if(target && !spellbook.GetTimeStopped())
+                transform.LookAt(target.transform);
 
     }
 

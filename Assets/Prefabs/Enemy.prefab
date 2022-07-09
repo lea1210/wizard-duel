@@ -223,7 +223,6 @@ MonoBehaviour:
   movementTimerOffsetMax: 30
   animator: {fileID: 3747723209942500483}
   movementSpeed: 0
-  doDodge: 0
   moving: 1
   fleeingDistance: 5
   targetingDistance: 40
@@ -231,6 +230,9 @@ MonoBehaviour:
   castDelay: 30
   castCooldown: 30
   speedUp: {fileID: 8300000, guid: a42b324edb983f648b8c54023cfff75e, type: 3}
+  spellLevel: 0
+  missingAngle: 0
+  chanceToMiss: 0
 --- !u!1 &3747723209765056919
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3747723209942500487}
   - component: {fileID: 3747723209942500488}
-  - component: {fileID: 3747723209942500486}
+  - component: {fileID: 1490950271567758884}
   - component: {fileID: 3747723209942500484}
   - component: {fileID: 3747723209942500485}
   - component: {fileID: 3217500025476208912}
@@ -401,7 +403,8 @@ MonoBehaviour:
   maxHealth: 100
   healthbar: {fileID: 3747723209168516369}
   enemyModel: {fileID: 4090394046543775634}
---- !u!114 &3747723209942500486
+  trainMode: 0
+--- !u!114 &1490950271567758884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

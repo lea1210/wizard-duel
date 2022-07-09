@@ -51,22 +51,24 @@ public class Enemy : MonoBehaviour
 
     public void OnCollison(Collision collision)
     {
-        switch (collision.gameObject.name)
+        if (collision.gameObject.tag == "OwnSpell")
         {
-            //case SpellTypes.SpellType.circle.ToString():
-            case "circle":
-                currentHealth -= (int)SpellTypes.SpellType.circle;
-                break;
-            case "fire":
-                currentHealth -= (int)SpellTypes.SpellType.fire;
-                break;
+            switch (collision.gameObject.name)
+            {
+                //case SpellTypes.SpellType.circle.ToString():
+                case "circle":
+                    currentHealth -= (int)SpellTypes.SpellType.circle;
+                    break;
+                case "fire":
+                    currentHealth -= (int)SpellTypes.SpellType.fire;
+                    break;
+            }
         }
         if (collision.gameObject.name != "detected")
         {
             damageTimer = 0;
-            if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
+            if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString() && collision.gameObject.tag != "Spell")
             {
-                collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 Destroy(collision.gameObject, 0.5f);
             }
             else if (String.Compare(collision.gameObject.tag, "OwnSpell") == 0)
@@ -91,6 +93,11 @@ public class Enemy : MonoBehaviour
         Debug.Log("Play Sound: " + sound.name); 
         audioSource.clip = sound;
         audioSource.Play();
+    }
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
     }
 
 

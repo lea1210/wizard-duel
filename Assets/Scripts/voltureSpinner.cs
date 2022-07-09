@@ -9,6 +9,6 @@ public class voltureSpinner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.Rotate(Vector3.up, -1);
+        gameObject.transform.Rotate(Vector3.up, -0.5f);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.Events;
 
 
@@ -60,6 +61,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     float chanceToMiss = 0f;
 
+    private float startY;
+
 
     // Start is called before the first frame update
     void Start()
@@ -67,62 +70,74 @@ public class EnemyManager : MonoBehaviour
         spellList.Add(SpellTypes.SpellType.circle);
         spellList.Add(SpellTypes.SpellType.fire);
         spellList.Add(SpellTypes.SpellType.speed);
+        startY = gameObject.transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentEnemy)
+
+        if (!spellBook.GetTimeStopped())
         {
-            if (spellLevel > 0) 
-                spellTimer++;
-            movementTimer++;
-
-
-            if (spellTimer == castCooldown)
-                moving = true;
-
-            if (spellTimer == spellTimerMax + spellTimerOffset - castDelay)
+            if (currentEnemy)
             {
-                if (spellLevel > spellList.Count)
-                    spellLevel = spellList.Count;
-                currentSpell = spellList[Random.Range(0, spellLevel)];
-                if (spellBook.TestForTargetableSpell(currentSpell.ToString(), this))
+                if (Math.Abs(gameObject.transform.position.y - startY) < 20)
                 {
-                    spellBook.createEnemyTargetField(currentEnemy);
+                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, startY, gameObject.transform.position.z);
                 }
-                moving = false;
-            }
 
-            if (spellTimer == spellTimerMax + spellTimerOffset)
-            {
-                animator.Play("stop");
-                spellTimer = 0;
-                spellTimerOffset = Random.Range(-spellTimerOffsetMax, spellTimerOffsetMax);
-                if (currentSpell == SpellTypes.SpellType.speed) {
-                    currentEnemy.playSound(speedUp);
-                }
-                spellBook.CastSpell(currentSpell.ToString(), this);
+                if (spellLevel > 0)
+                    spellTimer++;
+                movementTimer++;
 
-            }
 
-            if (moving)
-            {
-                animator.Play("walk");
-                if (movementTimer >= movementTimerMax + movementTimerOffset)
+                if (spellTimer == castCooldown)
+                    moving = true;
+
+                if (spellTimer == spellTimerMax + spellTimerOffset - castDelay)
                 {
-                    movementTimer = 0;
-                    movementTimerOffset = Random.Range(-movementTimerOffsetMax, movementTimerOffsetMax);
-                    CreateNewMovementDirection();
+                    if (spellLevel > spellList.Count)
+                        spellLevel = spellList.Count;
+                    currentSpell = spellList[UnityEngine.Random.Range(0, spellLevel)];
+                    Debug.Log(currentSpell);
+                    if (spellBook.TestForTargetableSpell(currentSpell.ToString(), this))
+                    {
+                        spellBook.createEnemyTargetField(currentEnemy);
+                    }
+                    moving = false;
                 }
-                TestPlayerDistance();
-                AvoidCollision();
-                currentEnemy.transform.Translate(movingDirection * movementSpeed);
-                if (movementChanged)
+
+                if (spellTimer == spellTimerMax + spellTimerOffset)
                 {
-                    movementTimer = 0;
-                    movementTimerOffset = Random.Range(-movementTimerOffsetMax, movementTimerOffsetMax);
-                    CreateNewMovementDirection();
+                    animator.Play("stop");
+                    spellTimer = 0;
+                    spellTimerOffset = UnityEngine.Random.Range(-spellTimerOffsetMax, spellTimerOffsetMax);
+                    if (currentSpell == SpellTypes.SpellType.speed)
+                    {
+                        currentEnemy.playSound(speedUp);
+                    }
+                    spellBook.CastSpell(currentSpell.ToString(), this);
+
+                }
+
+                if (moving)
+                {
+                    animator.Play("walk");
+                    if (movementTimer >= movementTimerMax + movementTimerOffset)
+                    {
+                        movementTimer = 0;
+                        movementTimerOffset = UnityEngine.Random.Range(-movementTimerOffsetMax, movementTimerOffsetMax);
+                        CreateNewMovementDirection();
+                    }
+                    TestPlayerDistance();
+                    AvoidCollision();
+                    currentEnemy.transform.Translate(movingDirection * movementSpeed);
+                    if (movementChanged)
+                    {
+                        movementTimer = 0;
+                        movementTimerOffset = UnityEngine.Random.Range(-movementTimerOffsetMax, movementTimerOffsetMax);
+                        CreateNewMovementDirection();
+                    }
                 }
             }
         }
@@ -162,12 +177,12 @@ public class EnemyManager : MonoBehaviour
 
     public Vector3 GetAlteredCastVector(Vector3 castVector)
     {
-        if (Random.Range(0, 100) < chanceToMiss)
+        if (UnityEngine.Random.Range(0, 100) < chanceToMiss)
         {
             if (missingAngle > 90)
                 missingAngle = 90;
-            float direction = Random.Range(-100, 100) > 0 ? 1 : -1;
-            float rotation = Random.Range(0, missingAngle) * direction;
+            float direction = UnityEngine.Random.Range(-100, 100) > 0 ? 1 : -1;
+            float rotation = UnityEngine.Random.Range(0, missingAngle) * direction;
             return Quaternion.AngleAxis(rotation, Vector3.up) * castVector;
         }
         else
@@ -179,8 +194,8 @@ public class EnemyManager : MonoBehaviour
 
     private void CreateNewMovementDirection()
     {
-        int randomDirection = Random.Range(0, 361);
-        float radiant = randomDirection * Mathf.PI / 180;
+        int RandomDirection = UnityEngine.Random.Range(0, 361);
+        float radiant = RandomDirection * Mathf.PI / 180;
         movingDirection = new Vector3(Mathf.Cos(radiant),0,Mathf.Sin(radiant));
 
     }
@@ -192,14 +207,14 @@ public class EnemyManager : MonoBehaviour
             currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x, 0, currentEnemy.transform.position.z - player.transform.position.z) * -movementSpeed*0.25f, Space.World);
             movingDirection = Vector3.zero;
             movementChanged = true;
-           // Debug.Log("Targeting");
+            Debug.Log("Targeting");
         }
         else if (Vector3.Distance(currentEnemy.transform.position, player.transform.position) < fleeingDistance)
         {
             currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x,0, currentEnemy.transform.position.z - player.transform.position.z) * movementSpeed * 0.25f, Space.World);
             movingDirection = Vector3.zero;
             movementChanged = true;
-            //Debug.Log("Fleeing");
+            Debug.Log("Fleeing");
         }
         else
         {
@@ -217,7 +232,7 @@ public class EnemyManager : MonoBehaviour
                 currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - obj.transform.position.x, 0, currentEnemy.transform.position.z - obj.transform.position.z) * movementSpeed*0.25f, Space.World);
                 movingDirection = Vector3.zero;
                 movementChanged = true;
-                //Debug.Log("avoiding");
+                Debug.Log("avoiding");
             }
         }
     }

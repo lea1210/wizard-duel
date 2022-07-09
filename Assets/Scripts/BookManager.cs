@@ -20,7 +20,7 @@ public class BookManager : MonoBehaviour
     public InputHelpers.Button leftTriggerButton;
 
     public List<GameObject> pages = new List<GameObject> ();
-    int currentPage = 0;
+    int currentPage = 1;
     public float inputThreshold = 0.1f;
 
     bool open = false;
@@ -49,12 +49,6 @@ public class BookManager : MonoBehaviour
     [SerializeField]
     SpellBook spellbook;
 
-    [SerializeField]
-    GameObject stonepage;
-    [SerializeField]
-    GameObject firepage;
-    [SerializeField]
-    GameObject speedPage;
 
 
     

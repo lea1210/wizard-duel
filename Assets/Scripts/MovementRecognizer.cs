@@ -49,7 +49,6 @@ public class MovementRecognizer : MonoBehaviour
     [SerializeField]
     WalkDetecter walkDetecter;
 
-    int debugTimer = 0;
     [SerializeField]
     AudioClip spawnTargetCircle;
     [SerializeField]
@@ -221,7 +220,6 @@ public class MovementRecognizer : MonoBehaviour
                     gestureList.Add(newGesture);
                     string fileName = Application.persistentDataPath + "/" + newGestureName + ".xml";
                     GestureIO.WriteGesture(pointArray, newGestureName, fileName);
-                   // creationMode = false;
                 }
                 else
                 {

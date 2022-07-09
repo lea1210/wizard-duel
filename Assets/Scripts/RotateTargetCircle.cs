@@ -4,8 +4,23 @@ using UnityEngine;
 
 public class RotateTargetCircle : MonoBehaviour
 {
+
+    [SerializeField]
+    SpellBook spellBook;
+    [SerializeField]
+    bool isPlayer;
     void Update()
     {
-        gameObject.transform.Rotate(new Vector3(0, 0, 0.3f));
+        if (isPlayer)
+        {
+            gameObject.transform.Rotate(new Vector3(0, 0, 0.3f));
+        }
+        else
+        {
+            if (!spellBook.GetTimeStopped())
+            {
+                gameObject.transform.Rotate(new Vector3(0, 0, 0.3f));
+            }
+        }
     }
 }

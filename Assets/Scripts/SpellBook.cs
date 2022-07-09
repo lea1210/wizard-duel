@@ -50,25 +50,35 @@ public class SpellBook : MonoBehaviour
     EnemyManager lastCaster;
     int speedTimerEnemy = -1;
 
-
+    [SerializeField]
+    List<Material> passiveEffectMaterials = new List<Material>();
     [SerializeField]
     GameObject passiveEffectEnemy;
     [SerializeField]
+    EditPassiveEffectCircle editEnemyPassiveEffect;
+
+    [SerializeField]
     GameObject passiveEffectPlayer;
+    [SerializeField]
+    EditPassiveEffectCircle editPlayerPassiveEffect;
 
     AudioSource audioSource;
     [SerializeField]
     AudioClip speedUp;
 
+    bool timeStopped = false;
+
     // Start is called before the first frame update
     void Start()
     {
         //Fill Spellbook
+        spellbook[SpellTypes.SpellType.stopTime.ToString()] = -1;
         spellbook[SpellTypes.SpellType.circle.ToString()] = 1;
         spellbook[SpellTypes.SpellType.fire.ToString()] = 2;
         spellbook[SpellTypes.SpellType.speed.ToString()] = 3;
 
         nonTargetableSpells.Add(SpellTypes.SpellType.speed.ToString());
+        nonTargetableSpells.Add(SpellTypes.SpellType.stopTime.ToString());
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -76,26 +86,30 @@ public class SpellBook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(speedTimerPlayer > 0)
-        {
-            speedTimerPlayer--;
-        }
-        else if(speedTimerPlayer==0)
-        {
-            player.modifyMovementSpeed(0.5f);
-            speedTimerPlayer = -1;
-            passiveEffectPlayer.SetActive(false);
-        }
 
-        if (speedTimerEnemy > 0)
+        if (!timeStopped)
         {
-            speedTimerEnemy--;
-        }
-        else if (speedTimerEnemy == 0)
-        {
-            lastCaster.movementSpeed *= 0.5f;
-            speedTimerEnemy = -1;
-            passiveEffectEnemy.SetActive(false);
+            if (speedTimerPlayer > 0)
+            {
+                speedTimerPlayer--;
+            }
+            else if (speedTimerPlayer == 0)
+            {
+                player.modifyMovementSpeed(0.5f);
+                speedTimerPlayer = -1;
+                passiveEffectPlayer.SetActive(false);
+            }
+
+            if (speedTimerEnemy > 0)
+            {
+                speedTimerEnemy--;
+            }
+            else if (speedTimerEnemy == 0)
+            {
+                lastCaster.movementSpeed *= 0.5f;
+                speedTimerEnemy = -1;
+                passiveEffectEnemy.SetActive(false);
+            }
         }
 
     }
@@ -174,7 +188,7 @@ public class SpellBook : MonoBehaviour
     public void createEnemyTargetField(Enemy caster)
     {
         if(enemyTempSpellTargetWall == null)
-        enemyTempSpellTargetWall = Instantiate(enemySpellTargetWall,caster.transform.position+caster.transform.forward, Quaternion.identity);
+        enemyTempSpellTargetWall = Instantiate(enemySpellTargetWall,caster.transform.position+caster.transform.forward*1f, Quaternion.identity);
     }
 
     public void SafeStartPoint(Vector3 startPoint)
@@ -222,6 +236,7 @@ public class SpellBook : MonoBehaviour
                         break;
                     case 3:
                         castSpeed(caster);
+                        editEnemyPassiveEffect.SetMaterial(passiveEffectMaterials[0]);
                         passiveEffectEnemy.SetActive(true);
                         break;
                     default:
@@ -237,6 +252,11 @@ public class SpellBook : MonoBehaviour
                 spellCastPoint = spellCastStartPoint;
                 switch (spellbook[spellName])
                 {
+                    case -1:
+                        CastTimeStop();
+                        editPlayerPassiveEffect.SetMaterial(passiveEffectMaterials[1]);
+                        passiveEffectPlayer.SetActive(true);
+                        break;
                     case 1:
                         SummonStone(center, spellCastPoint);
                         break;
@@ -245,8 +265,10 @@ public class SpellBook : MonoBehaviour
                         break;
                     case 3:
                         castSpeed();
+                        editPlayerPassiveEffect.SetMaterial(passiveEffectMaterials[0]);
                         passiveEffectPlayer.SetActive(true);
                         break;
+    
                     default:
                         break;
 
@@ -266,17 +288,18 @@ public class SpellBook : MonoBehaviour
         if (caster)
         {
             lastCaster = caster;
+            speedTimerEnemy = (int)SpellTypes.SpellType.speed;
             if (speedTimerEnemy == -1)
                 caster.movementSpeed *= 2;
-            speedTimerEnemy = (int)SpellTypes.SpellType.speed;
+            
         }
         else
         {
             audioSource.clip = speedUp;
             audioSource.Play();
-            player.modifyMovementSpeed(2);  
+            speedTimerPlayer = (int)SpellTypes.SpellType.speed;  
             if(speedTimerPlayer == -1)
-                speedTimerPlayer = (int)SpellTypes.SpellType.speed;
+                player.modifyMovementSpeed(2);
         }
     }
 
@@ -317,7 +340,7 @@ public class SpellBook : MonoBehaviour
         if (caster)
             Destroy(caster.currentEnemy.GetComponent<BoxCollider>());
 
-
+    
         tempFireball = Instantiate(fireball, center, Quaternion.identity);
         walkDetecter.ignoreSpell(tempFireball);
         tempFireball.name = SpellTypes.SpellType.fire.ToString();
@@ -330,6 +353,7 @@ public class SpellBook : MonoBehaviour
         {
             tempFireball.tag = "Spell";
             body.velocity = caster.GetAlteredCastVector(spellCastPoint) * 20;
+            tempFireball.transform.LookAt(Camera.main.transform.position);  
 
         }
         else
@@ -347,6 +371,25 @@ public class SpellBook : MonoBehaviour
             waiter(caster.gameObject);
     }
 
+    private void CastTimeStop()
+    {
+        timeStopped = !timeStopped;
+        if (timeStopped)
+        {
+            Time.timeScale = 0;
+            audioSource.clip = speedUp;
+            audioSource.Play();
+            passiveEffectPlayer.SetActive(false);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            audioSource.clip = speedUp;
+            audioSource.Play();
+        }
+        
+    }
+
         private IEnumerator waiter(GameObject caster)
     {
         yield return new WaitForSeconds(1);
@@ -361,6 +404,11 @@ public class SpellBook : MonoBehaviour
     public void setSpellbookLevel(int level)
     {
         spellbookLevel = level;
+    }
+
+    public bool GetTimeStopped()
+    {
+        return timeStopped;
     }
     
 }

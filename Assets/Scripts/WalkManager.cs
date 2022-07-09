@@ -27,13 +27,9 @@ public class WalkManager : MonoBehaviour
 
     float summDistance = 0;
 
-    int side = -1;
 
     [SerializeField]
     BookManager bookManager;
-
-    bool leftHandUp = false;
-    bool rightHandUp = false;
 
 
     public bool canWalk;
@@ -70,7 +66,7 @@ public class WalkManager : MonoBehaviour
             if (rightPercentage > 0.5)
             {
                 movePlayer(rightPercentage);
-                side = 1;
+ 
             }
         
 
@@ -78,7 +74,7 @@ public class WalkManager : MonoBehaviour
             if (leftPercentage > 0.5)
             {
                 movePlayer(leftPercentage);
-                side = 2;
+           
             }
        
 
