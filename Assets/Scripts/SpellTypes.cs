@@ -8,7 +8,7 @@ public class SpellTypes
     {
         circle = 10,
         fire = 20,
-        speed = 300,
+        speed = 500,
         stopTime = 0
     }
     
