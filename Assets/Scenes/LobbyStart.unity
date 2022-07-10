@@ -478,6 +478,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1082503852}
     - target: {fileID: 8720380438223779043, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
+      propertyPath: spellbookLevel
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720380438223779043, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
       propertyPath: passiveEffectEnemy
       value: 
       objectReference: {fileID: 290927190}

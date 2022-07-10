@@ -9,8 +9,11 @@ public class LookAt : MonoBehaviour
     [SerializeField]
     private SpellBook spellbook;
 
+
+
     private void Start()
     {   
+
         if(target == null)
             target = Camera.main.gameObject;
     }
@@ -22,6 +25,10 @@ public class LookAt : MonoBehaviour
         {
             if (target && !spellbook.GetTimeStopped())
                 transform.LookAt(target.transform);
+                if(gameObject.name == "Enemy")
+                {
+                    gameObject.transform.rotation = new Quaternion(0, gameObject.transform.rotation.y, 0, gameObject.transform.rotation.w);
+                }
         }
         else
         {

@@ -79,7 +79,9 @@ public class Enemy : MonoBehaviour
             damageTimer = 0;
             if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString() && collision.gameObject.tag != "Spell")
             {
-                Destroy(collision.gameObject, 0.5f);
+                GameObject child = collision.gameObject.transform.GetChild(0).gameObject;
+                child.SetActive(false);
+                Destroy(collision.gameObject, 1.5f);
             }
             else if (String.Compare(collision.gameObject.tag, "OwnSpell") == 0)
             {

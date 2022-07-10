@@ -2771,17 +2771,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 272868791093828604, guid: 9f0a162e9054b7f429b78ee53ee82e9d, type: 3}
   m_PrefabInstance: {fileID: 1378804536}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1424432394 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8720380438162221962, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
-  m_PrefabInstance: {fileID: 810206952}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1424432396 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8720380438162221687, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
   m_PrefabInstance: {fileID: 810206952}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424432394}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d05dd3f1a842d64e8d604cd2c528039, type: 3}
@@ -4146,7 +4141,7 @@ PrefabInstance:
     - target: {fileID: 1490950271567758884, guid: e0e8d9c4dd214ad45820adfae2ec1cbf, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 1424432394}
+      objectReference: {fileID: 0}
     - target: {fileID: 1490950271567758884, guid: e0e8d9c4dd214ad45820adfae2ec1cbf, type: 3}
       propertyPath: spellbook
       value: 

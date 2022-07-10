@@ -35,7 +35,7 @@ the circle. The angle in which you pierce
 the circle results in the direction of the spell.
 Now you can try to shoot it at your practice doll
 #
-There are also spells that affect passivly.
+There are also spells that affect you passivly.
 The second spell in your book increases
 #
 your walking speed for a few seconds. You don´t 
@@ -43,3 +43,4 @@ have to aim the spell, you can just cast it!
 #
 If you feel ready step into the green portal
 and face your first oponent!
+#

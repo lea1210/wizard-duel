@@ -497,17 +497,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfb20ec56ae6cec4b935512fd3ecbcbf, type: 3}
---- !u!1 &64136260 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8720380438162221962, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
-  m_PrefabInstance: {fileID: 1873567306}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &64136262 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8720380438162221687, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
   m_PrefabInstance: {fileID: 1873567306}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 64136260}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d05dd3f1a842d64e8d604cd2c528039, type: 3}
@@ -19239,6 +19234,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1047020927}
     - target: {fileID: 8720380438223779043, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
+      propertyPath: spellbookLevel
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720380438223779043, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
       propertyPath: passiveEffectEnemy
       value: 
       objectReference: {fileID: 897498487}
@@ -19246,6 +19245,10 @@ PrefabInstance:
       propertyPath: editEnemyPassiveEffect
       value: 
       objectReference: {fileID: 897498488}
+    - target: {fileID: 8720380438658164837, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
+      propertyPath: textAsset
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
 --- !u!1 &1876144078
@@ -22854,7 +22857,7 @@ PrefabInstance:
     - target: {fileID: 1490950271567758884, guid: e0e8d9c4dd214ad45820adfae2ec1cbf, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 64136260}
+      objectReference: {fileID: 0}
     - target: {fileID: 1490950271567758884, guid: e0e8d9c4dd214ad45820adfae2ec1cbf, type: 3}
       propertyPath: spellbook
       value: 

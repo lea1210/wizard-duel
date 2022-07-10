@@ -79,8 +79,9 @@ public class SpellBook : MonoBehaviour
         //Fill Spellbook
         spellbook[SpellTypes.SpellType.timeStop.ToString()] = -1;
         spellbook[SpellTypes.SpellType.stone.ToString()] = 1;
-        spellbook[SpellTypes.SpellType.fire.ToString()] = 2;
-        spellbook[SpellTypes.SpellType.speed.ToString()] = 3;
+        spellbook[SpellTypes.SpellType.speed.ToString()] = 2;
+        spellbook[SpellTypes.SpellType.fire.ToString()] = 3;
+        
 
         nonTargetableSpells.Add(SpellTypes.SpellType.speed.ToString());
         nonTargetableSpells.Add(SpellTypes.SpellType.timeStop.ToString());
@@ -265,10 +266,10 @@ public class SpellBook : MonoBehaviour
                     case 1:
                         SummonStone(center, spellCastPoint);
                         break;
-                    case 2:
+                    case 3:
                         SummonFireball(center, spellCastPoint);
                         break;
-                    case 3:
+                    case 2:
                         castSpeed();
                         passiveEffectPlayer.SetActive(true);
                         editPlayerPassiveEffect.SetMaterial(passiveEffectMaterials[0]);
@@ -303,7 +304,7 @@ public class SpellBook : MonoBehaviour
         }
         else
         {
-            Debug.Log("Speed: Casted");
+            
             audioSource.clip = speedUp;
             audioSource.Play();
             if(speedTimerPlayer == -1)
@@ -372,6 +373,7 @@ public class SpellBook : MonoBehaviour
             Vector3 forceVector = (center - spellCastPoint);
             playerCastEvent.Invoke();
             body.velocity = forceVector * 30;
+            tempFireball.transform.LookAt(Camera.main.transform.forward*3);
         }
         body.useGravity = true;
 

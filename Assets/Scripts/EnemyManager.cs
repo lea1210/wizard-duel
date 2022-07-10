@@ -83,7 +83,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (currentEnemy)
             {
-                if (Math.Abs(gameObject.transform.position.y - startY) < 20)
+                if (Math.Abs(gameObject.transform.position.y - startY) < 1)
                 {
                     gameObject.transform.position = new Vector3(gameObject.transform.position.x, startY, gameObject.transform.position.z);
                 }

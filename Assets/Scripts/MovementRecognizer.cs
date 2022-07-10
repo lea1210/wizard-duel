@@ -169,7 +169,7 @@ public class MovementRecognizer : MonoBehaviour
 
                 positionList.Clear();
                 positionList.Add(rightMovementSource.position);
-                Debug.Log("Start: Start movement");
+            
                 if (debugCubePrefab)
                    Destroy(Instantiate(debugCubePrefab, rightMovementSource.position, Quaternion.identity), 3);
             }
@@ -248,29 +248,37 @@ public class MovementRecognizer : MonoBehaviour
                 {
 
                     Result result = PointCloudRecognizer.Classify(newGesture, gestureList.ToArray());
-                    Debug.Log("Mode:Recog Mode");
-                    Debug.Log("Gestures: " + gestureList.Count);
+   
                     if (result.Score > recognitionThreshold && spellCooldown == 0)
                     {
-                        Debug.Log("Recog: Passed test");
+
                         currentSpell = result.GestureClass;
+
                         if (spellBook.testSpellUnlocked(currentSpell))
                         {
                             if (spellBook.TestForTargetableSpell(currentSpell))
                             {
-                                Debug.Log("Movement: Created spell " + currentSpell);
+
                                 player.playSound(spawnTargetCircle);
                                 spellBook.CreateTargetField(positionList, pointArray);
-                               
+                                
                             }
                             else
                             {
-                                Debug.Log("Movement: Created Untargeted spell " + currentSpell);
+                                
+
                                 spellBook.CastSpell(currentSpell);
                                 currentSpell = "";
                               
                             }
                             positionList.Clear();
+
+                        }
+                        else
+                        {
+                            positionList.Clear();
+                            audioSource.Play();
+                            currentSpell = "";
                         }
 
                     }
