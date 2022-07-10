@@ -66,19 +66,24 @@ public class SpellBook : MonoBehaviour
     [SerializeField]
     AudioClip speedUp;
 
+    [SerializeField]
+    AudioClip timeStop;
+    [SerializeField]
+    AudioClip timeResume;
+
     bool timeStopped = false;
 
     // Start is called before the first frame update
     void Start()
     {
         //Fill Spellbook
-        spellbook[SpellTypes.SpellType.stopTime.ToString()] = -1;
-        spellbook[SpellTypes.SpellType.circle.ToString()] = 1;
+        spellbook[SpellTypes.SpellType.timeStop.ToString()] = -1;
+        spellbook[SpellTypes.SpellType.stone.ToString()] = 1;
         spellbook[SpellTypes.SpellType.fire.ToString()] = 2;
         spellbook[SpellTypes.SpellType.speed.ToString()] = 3;
 
         nonTargetableSpells.Add(SpellTypes.SpellType.speed.ToString());
-        nonTargetableSpells.Add(SpellTypes.SpellType.stopTime.ToString());
+        nonTargetableSpells.Add(SpellTypes.SpellType.timeStop.ToString());
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -137,6 +142,7 @@ public class SpellBook : MonoBehaviour
 
     public bool testSpellUnlocked(string spell)
     {
+        Debug.Log("Spellbook: " + spell);
         if (spellbook[spell] <= spellbookLevel){
             return true;
         }
@@ -254,7 +260,7 @@ public class SpellBook : MonoBehaviour
                     case -1:
                         CastTimeStop();
                         editPlayerPassiveEffect.SetMaterial(passiveEffectMaterials[1]);
-                        passiveEffectPlayer.SetActive(true);
+                        passiveEffectPlayer.SetActive(!passiveEffectPlayer.activeSelf);
                         break;
                     case 1:
                         SummonStone(center, spellCastPoint);
@@ -264,8 +270,9 @@ public class SpellBook : MonoBehaviour
                         break;
                     case 3:
                         castSpeed();
-                        editPlayerPassiveEffect.SetMaterial(passiveEffectMaterials[0]);
                         passiveEffectPlayer.SetActive(true);
+                        editPlayerPassiveEffect.SetMaterial(passiveEffectMaterials[0]);
+                       
                         break;
     
                     default:
@@ -296,6 +303,7 @@ public class SpellBook : MonoBehaviour
         }
         else
         {
+            Debug.Log("Speed: Casted");
             audioSource.clip = speedUp;
             audioSource.Play();
             if(speedTimerPlayer == -1)
@@ -312,7 +320,7 @@ public class SpellBook : MonoBehaviour
         
         tempStone = Instantiate(stone,center,Quaternion.identity);
         walkDetecter.ignoreSpell(tempStone);
-        tempStone.name = SpellTypes.SpellType.circle.ToString();
+        tempStone.name = SpellTypes.SpellType.stone.ToString();
         
         Rigidbody body = tempStone.gameObject.GetComponent<Rigidbody>();
         if (caster)
@@ -372,20 +380,19 @@ public class SpellBook : MonoBehaviour
             waiter(caster.gameObject);
     }
 
-    private void CastTimeStop()
+    public void CastTimeStop()
     {
         timeStopped = !timeStopped;
         if (timeStopped)
         {
             Time.timeScale = 0;
-            audioSource.clip = speedUp;
+            audioSource.clip = timeStop;
             audioSource.Play();
-            passiveEffectPlayer.SetActive(false);
         }
         else
         {
             Time.timeScale = 1;
-            audioSource.clip = speedUp;
+            audioSource.clip = timeResume;
             audioSource.Play();
         }
         

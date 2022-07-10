@@ -9,6 +9,7 @@ public class PortalCollision : MonoBehaviour
 
     [SerializeField]
     ArenaScenes.ArenaScene scene;
+
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.name =="VR Camera" || collision.gameObject.name == "WalkDetecter")

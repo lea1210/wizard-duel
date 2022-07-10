@@ -49,7 +49,12 @@ public class Enemy : MonoBehaviour
             if(damageTimer >= 450)
             {
                 if(currentHealth < maxHealth)
-                currentHealth += 1f;
+                    currentHealth += 1f;
+            }
+            else if(currentHealth < 30)
+            {
+                if (currentHealth < maxHealth)
+                    currentHealth += 10f;
             }
         }
         
@@ -61,8 +66,8 @@ public class Enemy : MonoBehaviour
         {
             switch (collision.gameObject.name)
             {
-                case "circle":
-                    currentHealth -= (int)SpellTypes.SpellType.circle;
+                case "stone":
+                    currentHealth -= (int)SpellTypes.SpellType.stone;
                     break;
                 case "fire":
                     currentHealth -= (int)SpellTypes.SpellType.fire;

@@ -60,6 +60,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a83357833af2db34da9cbcf157f2d325, type: 2}
+  - {fileID: 2100000, guid: c32282a2796a8a64583a9a8ea87dcac5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +99,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1429867217770208769
 Transform:
   m_ObjectHideFlags: 0
@@ -139,3 +140,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930efeeedb82c7a43950d29f2e7fbca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellBook: {fileID: 0}
+  isPlayer: 0

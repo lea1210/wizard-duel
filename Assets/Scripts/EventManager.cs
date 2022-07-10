@@ -22,6 +22,7 @@ public class EventManager : MonoBehaviour
     ArenaScenes.ArenaScene sceneToLoad;
 
 
+
     void Update()
     {
         if (enemy != null)

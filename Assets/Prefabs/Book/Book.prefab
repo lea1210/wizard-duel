@@ -1428,7 +1428,6 @@ MonoBehaviour:
   - {fileID: 9183505633966194790}
   - {fileID: 2347262416256690723}
   - {fileID: 9183505634992491235}
-  inputThreshold: 0.1
   openBook: {fileID: 9183505632985841518}
   closedBook: {fileID: 9183505634853369398}
   animator: {fileID: 9183505634074234464}
@@ -1440,9 +1439,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 803d4f02ceb99d143931834fae8d2cb7, type: 3}
   movementRecognizer: {fileID: 0}
   spellbook: {fileID: 0}
-  trigger: 0
-  leftGripi: 0
-  rightGripi: 0
+  triggerDebug: 0
+  leftGripDebug: 0
+  rightGripDebug: 0
 --- !u!82 &9183505633027419951
 AudioSource:
   m_ObjectHideFlags: 0

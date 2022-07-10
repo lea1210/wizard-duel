@@ -6,10 +6,10 @@ public class SpellTypes
 {
     public enum SpellType
     {
-        circle = 10,
+        stone = 10,
         fire = 20,
         speed = 500,
-        stopTime = 0
+        timeStop = 0
     }
     
 }

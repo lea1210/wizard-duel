@@ -48,9 +48,8 @@ public class Player : MonoBehaviour
         {   
             switch (collision.gameObject.name)
             {
-                //case SpellTypes.SpellType.circle.ToString():
-                case "circle":
-                    currentHealth -= (int)SpellTypes.SpellType.circle;
+                case "stone":
+                    currentHealth -= (int)SpellTypes.SpellType.stone;
                     animator.Play("DamageShake");
                     break;
                 case "fire":

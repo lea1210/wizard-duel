@@ -53,17 +53,29 @@ public class MovementRecognizer : MonoBehaviour
     AudioClip spawnTargetCircle;
     [SerializeField]
     Player player;
+    //#################################################################
+    //Audio Handling
+    AudioSource audioSource;
+
+    //Debug
+    [SerializeField]
+    bool castSpeed;
+
+    [SerializeField]
+    bool castTime;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         string[] gestureFiles = Directory.GetFiles(Application.persistentDataPath, "*.xml");
         foreach(var item in gestureFiles)
         {
             gestureList.Add(GestureIO.ReadGestureFromFile(item));
         }
+       
     }
 
     // Update is called once per frame
@@ -73,6 +85,18 @@ public class MovementRecognizer : MonoBehaviour
         {
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(rightHand), rightTriggerButton, out bool rightTriggerIsPressed, inputThreshold);
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftTriggerButton, out bool leftTriggerIsPressed, inputThreshold);
+
+            if (castSpeed)
+            {
+                spellBook.CastSpell("speed");
+                castSpeed = false;
+            }
+            if (castTime)
+            {
+                spellBook.CastSpell("timeStop");
+                castTime = false;
+            }
+  
 
             if (rightTriggerIsPressed && leftTriggerIsPressed)
             {
@@ -145,7 +169,7 @@ public class MovementRecognizer : MonoBehaviour
 
                 positionList.Clear();
                 positionList.Add(rightMovementSource.position);
-
+                Debug.Log("Start: Start movement");
                 if (debugCubePrefab)
                    Destroy(Instantiate(debugCubePrefab, rightMovementSource.position, Quaternion.identity), 3);
             }
@@ -224,26 +248,36 @@ public class MovementRecognizer : MonoBehaviour
                 {
 
                     Result result = PointCloudRecognizer.Classify(newGesture, gestureList.ToArray());
-
+                    Debug.Log("Mode:Recog Mode");
+                    Debug.Log("Gestures: " + gestureList.Count);
                     if (result.Score > recognitionThreshold && spellCooldown == 0)
                     {
+                        Debug.Log("Recog: Passed test");
                         currentSpell = result.GestureClass;
                         if (spellBook.testSpellUnlocked(currentSpell))
                         {
                             if (spellBook.TestForTargetableSpell(currentSpell))
                             {
+                                Debug.Log("Movement: Created spell " + currentSpell);
                                 player.playSound(spawnTargetCircle);
                                 spellBook.CreateTargetField(positionList, pointArray);
                                
                             }
                             else
                             {
+                                Debug.Log("Movement: Created Untargeted spell " + currentSpell);
                                 spellBook.CastSpell(currentSpell);
                                 currentSpell = "";
-                                positionList.Clear();
+                              
                             }
+                            positionList.Clear();
                         }
 
+                    }
+                    else
+                    {
+                        positionList.Clear();
+                        audioSource.Play();
                     }
 
                 }

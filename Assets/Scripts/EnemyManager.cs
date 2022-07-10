@@ -68,7 +68,7 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spellList.Add(SpellTypes.SpellType.circle);
+        spellList.Add(SpellTypes.SpellType.stone);
         spellList.Add(SpellTypes.SpellType.speed);
         spellList.Add(SpellTypes.SpellType.fire);
         baseMovementSpeed = movementSpeed;
@@ -164,7 +164,7 @@ public class EnemyManager : MonoBehaviour
     public Vector3 getSpellCastPoint()
     {
         float distance = Vector3.Distance(currentEnemy.transform.position, player.transform.position);
-        if (currentSpell == SpellTypes.SpellType.circle)
+        if (currentSpell == SpellTypes.SpellType.stone)
         {
             return new Vector3(0, distance / 0.085f, 0);
         }

@@ -18,9 +18,16 @@ public class LookAt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(spellbook != null)
-            if(target && !spellbook.GetTimeStopped())
+        if (spellbook != null)
+        {
+            if (target && !spellbook.GetTimeStopped())
                 transform.LookAt(target.transform);
+        }
+        else
+        {
+            if(target != null)
+                transform.LookAt(target.transform);
+        }
 
     }
 

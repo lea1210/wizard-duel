@@ -11,7 +11,6 @@ public class TrackEnemyCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Enemy: Collision with " + collision.gameObject.name);
         enemy.OnCollison(collision);
     }
 
