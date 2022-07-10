@@ -12,6 +12,9 @@ public class Chatbubble : MonoBehaviour
     [SerializeField]
     TextAsset textAsset;
 
+    [SerializeField]
+    bool testSkipText;
+
     private void Awake()
     {
         background = transform.Find("Background").GetComponent<GameObject>();
@@ -19,12 +22,27 @@ public class Chatbubble : MonoBehaviour
     }
 
     private void Start()
-    {        
-        foreach(string line in textAsset.text.Split('#'))
+    {
+        if (textAsset != null)
         {
-            textList.Add(line);
+            foreach (string line in textAsset.text.Split('#'))
+            {
+                textList.Add(line);
+            }
+            setText();
         }
-        setText();
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    private void Update()
+    {
+        if (testSkipText)
+        {
+            nextText();
+            testSkipText = false;
+        }
     }
 
 

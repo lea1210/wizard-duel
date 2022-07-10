@@ -5,10 +5,11 @@ using UnityEngine;
 public class voltureSpinner : MonoBehaviour
 {
 
-
-    // Update is called once per frame
+    [SerializeField]
+    SpellBook spellBook;
     void Update()
     {
-        gameObject.transform.Rotate(Vector3.up, -0.5f);
+        if(spellBook.GetTimeStopped() == false)
+            gameObject.transform.Rotate(Vector3.up, -0.5f);
     }
 }

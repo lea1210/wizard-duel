@@ -12,8 +12,20 @@ EditorBuildSettings:
     path: Assets/Scenes/DesertArena.unity
     guid: ca3a045f64bbc534bb97658034f40575
   - enabled: 1
-    path: Assets/Scenes/Lobby1.unity
+    path: Assets/Scenes/LobbyStart.unity
     guid: efd1ae1c752a49c4d941878e9363b157
+  - enabled: 1
+    path: Assets/Scenes/LobbyForestWin.unity
+    guid: cbcbfacfbbae268438cb5efbfc60e61a
+  - enabled: 1
+    path: Assets/Scenes/LobbyForestLose.unity
+    guid: 5eac3bd1399bdd44ab3e26c9f69009aa
+  - enabled: 1
+    path: Assets/Scenes/LobbyDesertWin.unity
+    guid: 543ac39f1a44a6c49bfb8345f83aa86b
+  - enabled: 1
+    path: Assets/Scenes/LobbyDesertLose.unity
+    guid: c9a355191dc18874e8d2a659dc1f95a0
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 65f5d15835c46cb4ba5919bb29106ee8, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 68d894ac63677054bbbe4988ebcbc09d, type: 2}

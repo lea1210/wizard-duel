@@ -49,8 +49,12 @@ public class BookManager : MonoBehaviour
     [SerializeField]
     SpellBook spellbook;
 
-
-
+    [SerializeField]
+    bool trigger = false;
+    [SerializeField]
+    bool leftGripi = false;
+    [SerializeField]
+    bool rightGripi = false;
     
     // Start is called before the first frame update
     void Start()
@@ -75,7 +79,21 @@ public class BookManager : MonoBehaviour
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftGripButton, out bool leftGripIsPressed, inputThreshold);
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(rightHand), textButton, out bool textButtonIsPressed, inputThreshold);
 
-
+            if (trigger)
+            {
+                leftTriggerIsPressed = true;
+                trigger = false;
+            }
+            if (leftGripi)
+            {
+                leftGripIsPressed = true;
+                leftGripi = false;
+            }
+            if (rightGripi)
+            {
+                rightGripIsPressed = true;
+                rightGripi = false;
+            }
 
             if (leftTriggerIsPressed)
             {
@@ -118,7 +136,7 @@ public class BookManager : MonoBehaviour
                 rightGrip = rightGripIsPressed;
                 if (rightGrip && open)
                 {
-                    if (currentPage < spellbook.getSpellbookLevel()-1)
+                    if (currentPage < spellbook.getSpellbookLevel())
                     {
                             animator.Play("PageTurn");
                             pages[currentPage].SetActive(false);

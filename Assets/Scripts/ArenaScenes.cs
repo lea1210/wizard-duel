@@ -8,6 +8,10 @@ public class ArenaScenes
     {
         ForestArena,
         DesertArena,
-        Lobby1
+        LobbyStart,
+        LobbyDesertLose,
+        LobbyDesertWin,
+        LobbyForestWin,
+        LobbyForestLose
     }
 }

@@ -68,8 +68,9 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         spellList.Add(SpellTypes.SpellType.circle);
-        spellList.Add(SpellTypes.SpellType.fire);
         spellList.Add(SpellTypes.SpellType.speed);
+        spellList.Add(SpellTypes.SpellType.fire);
+        
         startY = gameObject.transform.position.y;
     }
 

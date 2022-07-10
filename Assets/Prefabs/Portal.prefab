@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 4869170419193050763}
   - component: {fileID: 3805064463209369860}
   - component: {fileID: 5877701029802499434}
+  - component: {fileID: 1655155750}
   m_Layer: 0
   m_Name: default
-  m_TagString: Untagged
+  m_TagString: PhysicalObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,6 +116,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!64 &1655155750
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2654448332990609518}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2432090755550338912, guid: 2c9f4ddd3f1348f4080802191a07a7c7, type: 3}
 --- !u!1 &5277759845145332802
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +435,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438939454494933175}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 10.6, y: 5.52, z: -98.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

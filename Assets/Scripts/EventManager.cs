@@ -24,19 +24,23 @@ public class EventManager : MonoBehaviour
 
     void Update()
     {
-        if(enemy.GetCurrentHealth() == 0)
+        if (enemy != null)
         {
-            //SceneManager.LoadSceneAsync(sceneForEnemy.ToString());
-            player.playFadeOut();
-        }
-        else if(player.GetCurrentHealth() == 0)
-        {
+            if (enemy.GetCurrentHealth() == 0)
+            {
+                sceneToLoad = enemyDeathScene;
+                player.playFadeOut();
+            }
+            else if (player.GetCurrentHealth() == 0)
+            {
 
-            player.playFadeOut();
-            sceneToLoad = playerDeathScene;
+                player.playFadeOut();
+                sceneToLoad = playerDeathScene;
+            }
         }
         
         if (playerFadeAnimator.GetCurrentAnimatorStateInfo(0).IsName("BlackScreen")){
+            Debug.Log(sceneToLoad.ToString());
             SceneManager.LoadSceneAsync(sceneToLoad.ToString());
         }
     }

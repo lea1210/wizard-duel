@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     bool trainMode = false;
+    [SerializeField]
+    bool poisonMode = false;
 
     int damageTimer = 150; 
 
@@ -34,13 +36,17 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (poisonMode)
+        {
+            currentHealth -= 1f;
+        }
         if(currentHealth >= 0)
             UpdateHealth();
 
         if (trainMode)
         {
             damageTimer++;
-            if(damageTimer >= 150)
+            if(damageTimer >= 450)
             {
                 if(currentHealth < maxHealth)
                 currentHealth += 1f;

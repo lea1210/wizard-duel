@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  spellbook: {fileID: 0}
 --- !u!1 &1429867218251940121
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.4811321, g: 0, b: 0.42187133, a: 1}
-  m_Intensity: 3
+  m_Intensity: 4
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

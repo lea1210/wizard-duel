@@ -46,7 +46,6 @@ public class SpellBook : MonoBehaviour
     int speedTimerPlayer = -1;
 
 
-    [SerializeField]
     EnemyManager lastCaster;
     int speedTimerEnemy = -1;
 
