@@ -23206,6 +23206,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1047020927}
     - target: {fileID: 8720380438223779043, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
+      propertyPath: enemyManager
+      value: 
+      objectReference: {fileID: 1047020927}
+    - target: {fileID: 8720380438223779043, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
       propertyPath: spellbookLevel
       value: 2
       objectReference: {fileID: 0}

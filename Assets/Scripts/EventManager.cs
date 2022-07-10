@@ -40,7 +40,6 @@ public class EventManager : MonoBehaviour
         }
         
         if (playerFadeAnimator.GetCurrentAnimatorStateInfo(0).IsName("BlackScreen")){
-            Debug.Log(sceneToLoad.ToString());
             SceneManager.LoadSceneAsync(sceneToLoad.ToString());
         }
     }

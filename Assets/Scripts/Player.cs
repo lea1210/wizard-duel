@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float movementSpeed = 0.005f;
-
+    float baseMovementSpeed;
     Animator animator;
 
     [SerializeField]
@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         currentHealth = maxHealth;
+        baseMovementSpeed = movementSpeed;
         playFadeIn();
     }
 
@@ -70,7 +71,6 @@ public class Player : MonoBehaviour
             {
                 collision.gameObject.name = "detected";
             }
-            Debug.Log(currentHealth);
         }
     }
 
@@ -112,6 +112,11 @@ public class Player : MonoBehaviour
     public void playFadeIn()
     {
         fadeAnimator.Play("FadeIn");
+    }
+
+    public void ResetMovementSpeed()
+    {
+        movementSpeed = baseMovementSpeed;
     }
 
 

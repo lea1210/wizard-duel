@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     RectTransform healthbar;
     [SerializeField]
-    public GameObject enemyModel;
+    GameObject enemyModel;
 
     [SerializeField]
     bool trainMode = false;
@@ -61,7 +61,6 @@ public class Enemy : MonoBehaviour
         {
             switch (collision.gameObject.name)
             {
-                //case SpellTypes.SpellType.circle.ToString():
                 case "circle":
                     currentHealth -= (int)SpellTypes.SpellType.circle;
                     break;
@@ -94,9 +93,8 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void playSound(AudioClip sound)
+    public void PlaySound(AudioClip sound)
     {
-        Debug.Log("Play Sound: " + sound.name); 
         audioSource.clip = sound;
         audioSource.Play();
     }

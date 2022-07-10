@@ -5,8 +5,8 @@ using TMPro;
 
 public class Chatbubble : MonoBehaviour
 {
-    private GameObject background;
-    private TextMeshPro textMeshPro;
+    GameObject background;
+    TextMeshPro textMeshPro;
     List<string> textList = new List<string>();
     int textIndex = 0;
     [SerializeField]
@@ -29,7 +29,7 @@ public class Chatbubble : MonoBehaviour
             {
                 textList.Add(line);
             }
-            setText();
+            SetText();
         }
         else
         {
@@ -40,20 +40,18 @@ public class Chatbubble : MonoBehaviour
     {
         if (testSkipText)
         {
-            nextText();
+            NextText();
             testSkipText = false;
         }
     }
 
-
-
-    private void setText()
+    private void SetText()
     {
         textMeshPro.text = "";
         textMeshPro.text = textList[textIndex];
     }
 
-    public void nextText()
+    public void NextText()
     {
         if (textIndex == textList.Count-2)
         {
@@ -62,7 +60,7 @@ public class Chatbubble : MonoBehaviour
         else
         {
             textIndex++;
-            setText();
+            SetText();
         }
 
     }

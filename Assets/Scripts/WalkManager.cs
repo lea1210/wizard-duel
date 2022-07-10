@@ -122,7 +122,7 @@ public class WalkManager : MonoBehaviour
         if (canWalk)
         {
             float multipler = 1f;
-            if (!bookManager.getOpen())
+            if (!bookManager.GetOpen())
                 multipler = 1.5f;
             float distance = player.GetMovementSpeed() * movePercentage * multipler;
             playerBody.transform.Translate(new Vector3(Camera.main.transform.forward.x * distance, 0, Camera.main.transform.forward.z * distance),Space.World);

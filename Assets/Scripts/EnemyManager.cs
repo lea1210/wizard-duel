@@ -8,13 +8,13 @@ using UnityEngine.Events;
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField]
-    public Enemy currentEnemy;
+    Enemy currentEnemy;
 
     [SerializeField]
     Player player;
 
     [SerializeField]
-    public SpellBook spellBook;
+    SpellBook spellBook;
 
     //Timer
     int spellTimer = 0;
@@ -22,13 +22,13 @@ public class EnemyManager : MonoBehaviour
     int spellTimerOffset = 0;
     int movementTimerOffset = 0;
     [SerializeField]
-    public int spellTimerMax = 200;
+    int spellTimerMax = 200;
     [SerializeField]
-    public int spellTimerOffsetMax = 60;
+    int spellTimerOffsetMax = 60;
     [SerializeField]
-    public int movementTimerMax = 60;
+    int movementTimerMax = 60;
     [SerializeField]
-    public int movementTimerOffsetMax = 30;
+    int movementTimerOffsetMax = 30;
 
     List<SpellTypes.SpellType> spellList = new List<SpellTypes.SpellType> ();
 
@@ -36,7 +36,8 @@ public class EnemyManager : MonoBehaviour
     Animator animator;
 
     [SerializeField]
-    public float movementSpeed = 0.1f;
+    float movementSpeed;
+    float baseMovementSpeed;
     Vector3 movingDirection = Vector3.zero;
 
     public bool moving = true;
@@ -70,7 +71,7 @@ public class EnemyManager : MonoBehaviour
         spellList.Add(SpellTypes.SpellType.circle);
         spellList.Add(SpellTypes.SpellType.speed);
         spellList.Add(SpellTypes.SpellType.fire);
-        
+        baseMovementSpeed = movementSpeed;
         startY = gameObject.transform.position.y;
     }
 
@@ -89,7 +90,7 @@ public class EnemyManager : MonoBehaviour
 
                 if (spellLevel > 0)
                     spellTimer++;
-                movementTimer++;
+                    movementTimer++;
 
 
                 if (spellTimer == castCooldown)
@@ -100,7 +101,6 @@ public class EnemyManager : MonoBehaviour
                     if (spellLevel > spellList.Count)
                         spellLevel = spellList.Count;
                     currentSpell = spellList[UnityEngine.Random.Range(0, spellLevel)];
-                    Debug.Log(currentSpell);
                     if (spellBook.TestForTargetableSpell(currentSpell.ToString(), this))
                     {
                         spellBook.createEnemyTargetField(currentEnemy);
@@ -115,7 +115,7 @@ public class EnemyManager : MonoBehaviour
                     spellTimerOffset = UnityEngine.Random.Range(-spellTimerOffsetMax, spellTimerOffsetMax);
                     if (currentSpell == SpellTypes.SpellType.speed)
                     {
-                        currentEnemy.playSound(speedUp);
+                        currentEnemy.PlaySound(speedUp);
                     }
                     spellBook.CastSpell(currentSpell.ToString(), this);
 
@@ -208,14 +208,12 @@ public class EnemyManager : MonoBehaviour
             currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x, 0, currentEnemy.transform.position.z - player.transform.position.z) * -movementSpeed*0.25f, Space.World);
             movingDirection = Vector3.zero;
             movementChanged = true;
-            Debug.Log("Targeting");
         }
         else if (Vector3.Distance(currentEnemy.transform.position, player.transform.position) < fleeingDistance)
         {
             currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - player.transform.position.x,0, currentEnemy.transform.position.z - player.transform.position.z) * movementSpeed * 0.25f, Space.World);
             movingDirection = Vector3.zero;
             movementChanged = true;
-            Debug.Log("Fleeing");
         }
         else
         {
@@ -233,9 +231,28 @@ public class EnemyManager : MonoBehaviour
                 currentEnemy.transform.Translate(new Vector3(currentEnemy.transform.position.x - obj.transform.position.x, 0, currentEnemy.transform.position.z - obj.transform.position.z) * movementSpeed*0.25f, Space.World);
                 movingDirection = Vector3.zero;
                 movementChanged = true;
-                Debug.Log("avoiding");
             }
         }
+    }
+
+    public float getMovementSpeed()
+    {
+        return movementSpeed;
+    }
+
+    public Enemy GetCurrentEnemy()
+    {
+        return currentEnemy;
+    }
+
+    public void SetMovementSpeed(float speed)
+    {
+        movementSpeed = speed;
+    }
+
+    public void ResetMovementSpeed()
+    {
+        movementSpeed = baseMovementSpeed;
     }
 
 

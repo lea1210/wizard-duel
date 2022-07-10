@@ -9,19 +9,24 @@ public class BookManager : MonoBehaviour
 {
 
     //Hand Tracking
-    public XRNode rightHand;
-    public InputHelpers.Button rightGripButton;
+    [SerializeField]
+    XRNode rightHand;
+    [SerializeField]
+    InputHelpers.Button rightGripButton;
     bool rightGrip = false;
-    public InputHelpers.Button textButton;
-
-    public XRNode leftHand;
-    public InputHelpers.Button leftGripButton;
+    [SerializeField]
+    InputHelpers.Button textButton;
+    [SerializeField]
+    XRNode leftHand;
+    [SerializeField]
+    InputHelpers.Button leftGripButton;
     bool leftGrip = false;
-    public InputHelpers.Button leftTriggerButton;
-
-    public List<GameObject> pages = new List<GameObject> ();
+    [SerializeField]
+    InputHelpers.Button leftTriggerButton;
+    [SerializeField]
+    List<GameObject> pages = new List<GameObject> ();
     int currentPage = 1;
-    public float inputThreshold = 0.1f;
+    float inputThreshold = 0.1f;
 
     bool open = false;
 
@@ -40,7 +45,8 @@ public class BookManager : MonoBehaviour
     bool nextText;
 
     AudioSource audioSource;
-    public List<AudioClip> audios = new List<AudioClip>();
+    [SerializeField]
+    List<AudioClip> audios = new List<AudioClip>();
 
     int openTimer = -1;
     [SerializeField]
@@ -49,14 +55,14 @@ public class BookManager : MonoBehaviour
     [SerializeField]
     SpellBook spellbook;
 
+    //Debug
     [SerializeField]
-    bool trigger = false;
+    bool triggerDebug = false;
     [SerializeField]
-    bool leftGripi = false;
+    bool leftGripDebug = false;
     [SerializeField]
-    bool rightGripi = false;
+    bool rightGripDebug = false;
     
-    // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -64,11 +70,8 @@ public class BookManager : MonoBehaviour
         open = false;
         rightGrip = false;
         leftGrip = false;
-        Debug.Log("Spellbook: Level " + spellbook.getSpellbookLevel());
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         try
@@ -79,26 +82,26 @@ public class BookManager : MonoBehaviour
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(leftHand), leftGripButton, out bool leftGripIsPressed, inputThreshold);
             InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(rightHand), textButton, out bool textButtonIsPressed, inputThreshold);
 
-            if (trigger)
+            //Debug
+            if (triggerDebug)
             {
                 leftTriggerIsPressed = true;
-                trigger = false;
+                triggerDebug = false;
             }
-            if (leftGripi)
+            if (leftGripDebug)
             {
                 leftGripIsPressed = true;
-                leftGripi = false;
+                leftGripDebug = false;
             }
-            if (rightGripi)
+            if (rightGripDebug)
             {
                 rightGripIsPressed = true;
-                rightGripi = false;
+                rightGripDebug = false;
             }
 
             if (leftTriggerIsPressed)
             {
                 openTimer = 30;
-                Debug.Log("Book: Left Trigger Pressed");
             }
 
             if (!movementRecognizer.isWalking && openTimer > -1)
@@ -122,7 +125,6 @@ public class BookManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Page: " + currentPage);
                     closedBook.SetActive(true);
                     openBook.SetActive(false);
                     openTimer = -1;
@@ -132,7 +134,6 @@ public class BookManager : MonoBehaviour
 
             if (rightGripIsPressed != rightGrip)
             {
-                Debug.Log("Book: Right Grip Pressed");
                 rightGrip = rightGripIsPressed;
                 if (rightGrip && open)
                 {
@@ -142,8 +143,7 @@ public class BookManager : MonoBehaviour
                             pages[currentPage].SetActive(false);
                             pages[currentPage+1].SetActive(true);
                             currentPage++; 
-                            Debug.Log("Page: " + currentPage);
-                            playAudio();
+                            PlayAudio();
                             
                     }
                  
@@ -154,7 +154,6 @@ public class BookManager : MonoBehaviour
 
             if (leftGripIsPressed != leftGrip)
             {
-                Debug.Log("Book: Left Grip Pressed");
                 leftGrip = leftGripIsPressed;
                 if (leftGrip && open)
                 {          
@@ -164,8 +163,7 @@ public class BookManager : MonoBehaviour
                         pages[currentPage].SetActive(false);
                         pages[currentPage-1].SetActive(true);
                         currentPage--;
-                        Debug.Log("Page: " + currentPage);
-                        playAudio();
+                        PlayAudio();
                         
                     }
         
@@ -176,11 +174,10 @@ public class BookManager : MonoBehaviour
 
             if (speechBubble && textButtonIsPressed)
             {
-                Debug.Log("Book: Text Pressed");
                 if (nextText != textButtonIsPressed)
                 {
                     nextText = textButtonIsPressed;
-                    chatbubble.nextText();
+                    chatbubble.NextText();
                 }
             }
             else
@@ -198,12 +195,12 @@ public class BookManager : MonoBehaviour
 
     }
 
-    public bool getOpen()
+    public bool GetOpen()
     {
         return open;
     }
 
-    void playAudio()
+    void PlayAudio()
     {
         audioSource.Play();
         audioSource.clip = audios[UnityEngine.Random.Range(0, 2)];

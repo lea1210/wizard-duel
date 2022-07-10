@@ -100,7 +100,6 @@ public class MovementRecognizer : MonoBehaviour
                     isMoving = false;
                 if (spellCooldown == 0)
                 {
-                    //spellBook.destroyTargetWall();
                     //Move Start
                     if (!isMoving && rightTriggerIsPressed)
                     {

@@ -46,7 +46,8 @@ public class SpellBook : MonoBehaviour
     int speedTimerPlayer = -1;
 
 
-    EnemyManager lastCaster;
+    [SerializeField]
+    EnemyManager enemyManager;
     int speedTimerEnemy = -1;
 
     [SerializeField]
@@ -105,7 +106,7 @@ public class SpellBook : MonoBehaviour
             }
             else if (speedTimerEnemy == 0)
             {
-                lastCaster.movementSpeed *= 0.5f;
+                enemyManager.ResetMovementSpeed();
                 speedTimerEnemy = -1;
                 passiveEffectEnemy.SetActive(false);
             }
@@ -119,7 +120,6 @@ public class SpellBook : MonoBehaviour
         {
             if (nonTargetableSpells.Contains(spell))
             {
-                Debug.Log("Return false");
                 return false;
             }
             return true;
@@ -286,26 +286,28 @@ public class SpellBook : MonoBehaviour
     {
         if (caster)
         {
-            lastCaster = caster;
-            speedTimerEnemy = (int)SpellTypes.SpellType.speed;
+            enemyManager = caster;
             if (speedTimerEnemy == -1)
-                caster.movementSpeed *= 2;
-            
+            {
+                caster.SetMovementSpeed(caster.getMovementSpeed()*2);
+            }
+            speedTimerEnemy = (int)SpellTypes.SpellType.speed;
+
         }
         else
         {
             audioSource.clip = speedUp;
             audioSource.Play();
-            speedTimerPlayer = (int)SpellTypes.SpellType.speed;  
             if(speedTimerPlayer == -1)
                 player.modifyMovementSpeed(2);
+            speedTimerPlayer = (int)SpellTypes.SpellType.speed;  
         }
     }
 
     public void SummonStone(Vector3 center,Vector3 spellCastPoint,EnemyManager caster = null)
     {
         if (caster)
-            Destroy(caster.currentEnemy.GetComponent<BoxCollider>());
+            Destroy(caster.GetCurrentEnemy().GetComponent<BoxCollider>());
 
         
         tempStone = Instantiate(stone,center,Quaternion.identity);
@@ -316,7 +318,7 @@ public class SpellBook : MonoBehaviour
         if (caster)
         {
             tempStone.tag = "Spell";
-            body.AddForce(caster.GetAlteredCastVector(caster.currentEnemy.transform.forward * 1000 + spellCastPoint));
+            body.AddForce(caster.GetAlteredCastVector(caster.GetCurrentEnemy().transform.forward * 1000 + spellCastPoint));
            
         }
         else
@@ -337,7 +339,7 @@ public class SpellBook : MonoBehaviour
     public void SummonFireball(Vector3 center, Vector3 spellCastPoint, EnemyManager caster = null)
     {
         if (caster)
-            Destroy(caster.currentEnemy.GetComponent<BoxCollider>());
+            Destroy(caster.GetCurrentEnemy().GetComponent<BoxCollider>());
 
     
         tempFireball = Instantiate(fireball, center, Quaternion.identity);
