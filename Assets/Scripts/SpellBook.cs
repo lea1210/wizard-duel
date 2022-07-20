@@ -236,11 +236,11 @@ public class SpellBook : MonoBehaviour
                         SummonStone(center, spellCastPoint,caster);
                         Destroy(enemyTempSpellTargetWall,0.5f);
                         break;
-                    case 2:
+                    case 3:
                         SummonFireball(center, spellCastPoint, caster);
                         Destroy(enemyTempSpellTargetWall, 0.5f);
                         break;
-                    case 3:
+                    case 2:
                         castSpeed(caster);
                         editEnemyPassiveEffect.SetMaterial(passiveEffectMaterials[0]);
                         passiveEffectEnemy.SetActive(true);
