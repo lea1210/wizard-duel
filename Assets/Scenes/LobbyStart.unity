@@ -425,6 +425,14 @@ PrefabInstance:
       propertyPath: floor
       value: 
       objectReference: {fileID: 1184571835}
+    - target: {fileID: 8720380437473828687, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
+      propertyPath: creationMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720380437473828687, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
+      propertyPath: newGestureName
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8720380438162221684, guid: e53dc1156a8672f488a04eb6525bf903, type: 3}
       propertyPath: m_RootOrder
       value: 2

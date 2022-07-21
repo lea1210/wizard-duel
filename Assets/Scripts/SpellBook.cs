@@ -371,9 +371,10 @@ public class SpellBook : MonoBehaviour
             collisionCamera.ignoreSpell(tempFireball);
             tempFireball.tag = "OwnSpell";
             Vector3 forceVector = (center - spellCastPoint);
-            playerCastEvent.Invoke();
+            tempFireball.transform.LookAt(Camera.main.transform.position);
+            tempFireball.transform.Rotate(new Vector3(0, 180, 0));
             body.velocity = forceVector * 30;
-            tempFireball.transform.LookAt(Camera.main.transform.forward);
+            
         }
         body.useGravity = true;
 
