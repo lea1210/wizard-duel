@@ -14,7 +14,10 @@ public class SpellDisabler : MonoBehaviour
         {
             if (collision.gameObject.name == SpellTypes.SpellType.fire.ToString())
             {
-                Destroy(collision.gameObject, 0.5f);
+                GameObject child = collision.gameObject.transform.GetChild(0).gameObject;
+                child.SetActive(false);
+                Destroy(collision.gameObject, 1.5f);
+
             }
             else
             {
